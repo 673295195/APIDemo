@@ -43,6 +43,7 @@
         <activity android:name=".Main2Activity">
         </activity>
         <activity android:name=".HongActivity"/>
+        <activity android:name=".Open"/>
     </application>
 
 </manifest>

@@ -9,14 +9,17 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.LinearLayout;
 
+import static com.example.skycheng.apidemo.R.style.Dialog;
+
 /**
  * Created by SkyCheng on 2017/9/22.
  */
 
-public class HongActivity extends AppCompatActivity{
+public class HongActivity extends AppCompatActivity {
 
     private LinearLayout mRed1;
     private Context mContext;
+    private LuckeyDialog dialog;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -31,11 +34,11 @@ public class HongActivity extends AppCompatActivity{
         mRed1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                LuckeyDialog.Builder builder = new LuckeyDialog.Builder(mContext,R.style.Dialog);//调用style中的Diaog
+                LuckeyDialog.Builder builder = new LuckeyDialog.Builder(mContext, Dialog);//调用style中的Diaog
                 builder.setName("系统");
                 builder.setOpenButton("", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        Intent intent = new Intent(mContext,Open.class);
+                        Intent intent = new Intent(mContext, Open.class);
                         startActivity(intent);
                         dialog.dismiss();
                     }
@@ -60,7 +63,7 @@ public class HongActivity extends AppCompatActivity{
 //                p.width = (int) (d.getWidth() * 0.75); // 宽度设置为屏幕的0.65
 //                dialogWindow.setAttributes(p);
 //</span>
-                   //     dialog.show();
+//                     dialog.show();
             }
         });
     }

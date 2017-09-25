@@ -1,5 +1,7 @@
 package com.example.skycheng.apidemo;
 
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -8,6 +10,9 @@ import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Display;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.RadioGroup;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -60,6 +65,7 @@ public class MainActivity extends AppCompatActivity implements SeekBar.OnSeekBar
     private LatLng latlng = new LatLng(mWEI, mJING);
     private Marker marker2;
     private TextView markerText;
+    private Intent mContext;
 
 
     @Override
@@ -96,7 +102,7 @@ public class MainActivity extends AppCompatActivity implements SeekBar.OnSeekBar
         //东莞
         aMap.addMarker(new MarkerOptions().anchor(0.5f, 0.5f)
                 .position(new LatLng(22.9468146495, 113.8909184933)).title("东莞市")
-                .snippet("东莞市:23.947287,113.890421").draggable(true));
+                .snippet("东莞市:松山湖").draggable(true));
 
 
         //3西安
@@ -161,7 +167,7 @@ public class MainActivity extends AppCompatActivity implements SeekBar.OnSeekBar
                 .position(Constants.ZHENGZHOU).title("郑州市").icons(giflist)
                 .draggable(true).period(10));
 
-        drawMarkers();// 添加10个带有系统默认icon的marker
+        //drawMarkers();// 添加10个带有系统默认icon的marker
     }
 
     public void drawMarkers() {
@@ -205,7 +211,6 @@ public class MainActivity extends AppCompatActivity implements SeekBar.OnSeekBar
     /**
      * 方法必须重写
      */
-
 
     private void setUpMap() {
 
@@ -333,6 +338,7 @@ public class MainActivity extends AppCompatActivity implements SeekBar.OnSeekBar
             Log.e("amap", "定位失败");
         }
     }
+
     //
     private void circleAndLocation() {
         aMap.moveCamera(CameraUpdateFactory
@@ -372,7 +378,7 @@ public class MainActivity extends AppCompatActivity implements SeekBar.OnSeekBar
 //        float v1 = mLocation.distanceTo(location);
 //        Log.e(TAG, "onMarkerClick: 经纬度距离"+ v1);
 //SHAXIAN1 = new LatLng(22.9491703230,113.8910579681)
-        double Lat1 = rad(22.9491703230);
+        double Lat1 = rad(22.9471703230);
         double Lat2 = rad(mWEI);
         double a = Lat1 - Lat2;
         double b = rad(113.8910579681) - rad(mJING);
@@ -380,13 +386,46 @@ public class MainActivity extends AppCompatActivity implements SeekBar.OnSeekBar
                 + Math.cos(Lat1) * Math.cos(Lat2)
                 * Math.pow(Math.sin(b / 2), 2)));
         s = s * EARTH_RADIUS;
+        //s为2个点之间的距离
         s = Math.round(s * 10000) / 10000;
         Log.e(TAG, "onMarkerClick: 距离s=" + s + "米");
-        //判断是否在范围内
+        //判断是否在范围内,在则弹出红包
         if (s <= 200) {
-            Log.d(TAG, "onMarkerClick: " + marker);
-            Intent intent = new Intent(this, HongActivity.class);
-            startActivity(intent);
+           // Log.d(TAG, "onMarkerClick: " + marker);
+
+
+            //弹出比例红包
+            LuckeyDialog.Builder builder = new LuckeyDialog.Builder(MainActivity.this, R.style.Dialog);//调用style中的Diaog
+            builder.setName("系统");
+            builder.setOpenButton("", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    Intent intent = new Intent(MainActivity.this, Open.class);
+                    startActivity(intent);
+                    dialog.dismiss();
+                }
+            });
+
+            builder.setCloseButton("", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int i) {
+                    dialog.dismiss();
+                }
+            });
+            Dialog dialog = builder.create();
+            Window dialogWindow = dialog.getWindow();
+
+
+            WindowManager m = getWindowManager();
+            Display d = m.getDefaultDisplay(); // 获取屏幕宽、高用
+            WindowManager.LayoutParams p = dialogWindow.getAttributes(); // 获取对话框当前的参数值
+            p.height = (int) (d.getHeight() * 0.7); // 高度设置为屏幕的0.6
+            p.width = (int) (d.getWidth() * 0.75); // 宽度设置为屏幕的0.65
+            dialogWindow.setAttributes(p);
+
+            dialog.show();
+
+//            Intent intent = new Intent(this, HongActivity.class);
+//            startActivity(intent);
 
             markerText.setText("你点击的是" + marker.getTitle());
 
