@@ -44,6 +44,8 @@
         </activity>
         <activity android:name=".HongActivity"/>
         <activity android:name=".Open"/>
+        <activity android:name=".OpenFail">
+        </activity>
     </application>
 
 </manifest>
