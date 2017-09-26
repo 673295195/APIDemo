@@ -19,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.amap.api.maps2d.AMap;
+import com.amap.api.maps2d.AMapUtils;
 import com.amap.api.maps2d.CameraUpdateFactory;
 import com.amap.api.maps2d.MapView;
 import com.amap.api.maps2d.model.BitmapDescriptor;
@@ -378,19 +379,29 @@ public class MainActivity extends AppCompatActivity implements SeekBar.OnSeekBar
 //        float v1 = mLocation.distanceTo(location);
 //        Log.e(TAG, "onMarkerClick: 经纬度距离"+ v1);
 //SHAXIAN1 = new LatLng(22.9491703230,113.8910579681)
-        double Lat1 = rad(22.9471703230);
-        double Lat2 = rad(mWEI);
-        double a = Lat1 - Lat2;
-        double b = rad(113.8910579681) - rad(mJING);
-        double s = 2 * Math.asin(Math.sqrt(Math.pow(Math.sin(a / 2), 2)
-                + Math.cos(Lat1) * Math.cos(Lat2)
-                * Math.pow(Math.sin(b / 2), 2)));
-        s = s * EARTH_RADIUS;
-        //s为2个点之间的距离
-        s = Math.round(s * 10000) / 10000;
-        Log.e(TAG, "onMarkerClick: 距离s=" + s + "米");
+
+
+//        double Lat1 = rad(22.9471703230);
+//        double Lat2 = rad(mWEI);
+//        double a = Lat1 - Lat2;
+//        double b = rad(113.8910579681) - rad(mJING);
+//        double s = 2 * Math.asin(Math.sqrt(Math.pow(Math.sin(a / 2), 2)
+//                + Math.cos(Lat1) * Math.cos(Lat2)
+//                * Math.pow(Math.sin(b / 2), 2)));
+//        s = s * EARTH_RADIUS;
+//        //s为2个点之间的距离
+//        s = Math.round(s * 10000) / 10000;
+//        Log.e(TAG, "onMarkerClick: 距离s=" + s + "米");
+
+        //计算2个经纬度之间的距离,精准度更高
+        LatLng latlng2=new LatLng(22.9471703230,113.8910579681);
+        LatLng latlng1=new LatLng(mWEI,mJING);
+        float calculateLineDistance = AMapUtils.calculateLineDistance(latlng1, latlng2);
+
+        Log.e(TAG, "22.9471703230,113.8910579681:= "+calculateLineDistance+"米" );
+
         //判断是否在范围内,在则弹出红包
-        if (s <= 200) {
+        if (calculateLineDistance <= 200) {
            // Log.d(TAG, "onMarkerClick: " + marker);
 
 
@@ -399,6 +410,8 @@ public class MainActivity extends AppCompatActivity implements SeekBar.OnSeekBar
             builder.setName("系统");
             builder.setOpenButton("", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
+
+                    //TODO  需要判断 红包是否领取成功
                     Intent intent = new Intent(MainActivity.this, Open.class);
                     startActivity(intent);
                     dialog.dismiss();

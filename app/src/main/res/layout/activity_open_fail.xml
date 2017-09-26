@@ -1,10 +1,89 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.example.skycheng.apidemo.OpenFail">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:gravity="center_vertical|center_horizontal"
+              android:orientation="vertical"
+              android:background="#D85940"
+    >
 
-</android.support.constraint.ConstraintLayout>
+    <!-- 关闭按钮框 -->
+    <RelativeLayout
+        android:id="@+id/top"
+        android:layout_width="match_parent"
+
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        >
+        <Button
+            android:id="@+id/fail_close"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:background="@drawable/close"
+            android:layout_margin="10dp"/>
+
+    </RelativeLayout>
+
+    <!-- 头像以及相关文字 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_below="@+id/top"
+        android:layout_weight="10"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="3">
+
+            <ImageButton
+                android:id="@+id/head_img"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:background="@drawable/ic_launcher"/>
+
+            <TextView
+                android:id="@+id/name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/head_img"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="10dp"
+                android:text="系统用户"
+                android:textColor="@color/yellow2"
+                android:textSize="18sp"/>
+
+            <TextView
+                android:textColor="@color/yellow"
+                android:gravity="center_horizontal"
+                android:layout_marginTop="30dp"
+                android:layout_below="@+id/name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="手慢了,红包派完了"
+                android:textSize="30dp"/>
+        </RelativeLayout>
+
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="3">
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="14dp"/>
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+</LinearLayout>
