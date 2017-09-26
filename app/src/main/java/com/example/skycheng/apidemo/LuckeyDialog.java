@@ -112,7 +112,7 @@ public class LuckeyDialog extends Dialog {
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             //加载布局
             final LuckeyDialog dialog = new LuckeyDialog(context, R.style.Dialog);
-            View layout = inflater.inflate(R.layout.net_layout, null);
+            View layout = inflater.inflate(R.layout.luckey_dialog, null);
 
             red_page = (Button) layout.findViewById(R.id.open_btn);
 //            <span style = "color:#ff0000;" >//red指的是需要播放动画的ImageView控件

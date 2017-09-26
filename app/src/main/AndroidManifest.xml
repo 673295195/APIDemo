@@ -29,14 +29,14 @@
             android:name="com.amap.api.v2.apikey"
             android:value="b63e9a1608ab8fc99b086fd04927b97d"/>
 
-        <activity android:name=".TwoButton">
+        <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity">
+        <activity android:name=".TwoButton">
         </activity>
         <activity android:name=".ThreeDMap">
         </activity>
@@ -45,6 +45,8 @@
         <activity android:name=".HongActivity"/>
         <activity android:name=".Open"/>
         <activity android:name=".OpenFail">
+        </activity>
+        <activity android:name=".MGCoinRecord">
         </activity>
     </application>
 

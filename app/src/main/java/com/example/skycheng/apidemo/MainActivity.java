@@ -112,7 +112,7 @@ public class MainActivity extends AppCompatActivity implements SeekBar.OnSeekBar
         markerOption.title("西安市").snippet("西安市：34.341568, 108.940174");
         markerOption.draggable(true);
         markerOption.icon(BitmapDescriptorFactory
-                .fromResource(R.drawable.arrow));
+                .fromResource(R.drawable.xiao));
         marker2 = aMap.addMarker(markerOption);
         marker2.showInfoWindow();
         // marker旋转90度
@@ -394,15 +394,15 @@ public class MainActivity extends AppCompatActivity implements SeekBar.OnSeekBar
 //        Log.e(TAG, "onMarkerClick: 距离s=" + s + "米");
 
         //计算2个经纬度之间的距离,精准度更高
-        LatLng latlng2=new LatLng(22.9471703230,113.8910579681);
-        LatLng latlng1=new LatLng(mWEI,mJING);
+        LatLng latlng2 = new LatLng(22.9471703230, 113.8910579681);
+        LatLng latlng1 = new LatLng(mWEI, mJING);
         float calculateLineDistance = AMapUtils.calculateLineDistance(latlng1, latlng2);
 
-        Log.e(TAG, "22.9471703230,113.8910579681:= "+calculateLineDistance+"米" );
+        Log.e(TAG, "22.9471703230,113.8910579681:= " + calculateLineDistance + "米");
 
         //判断是否在范围内,在则弹出红包
         if (calculateLineDistance <= 200) {
-           // Log.d(TAG, "onMarkerClick: " + marker);
+            // Log.d(TAG, "onMarkerClick: " + marker);
 
 
             //弹出比例红包
