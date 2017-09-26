@@ -30,6 +30,10 @@ public class MGCoinRecord extends AppCompatActivity {
         mRecycle.setAdapter(recycleAdapter);
     }
 
+    public void coinClose(View view) {
+        finish();
+    }
+
 
     private class RecycleAdapter extends RecyclerView.Adapter{
 
@@ -54,7 +58,7 @@ public class MGCoinRecord extends AppCompatActivity {
         }
     }
 
-    private class RecycleHolder extends RecyclerView.ViewHolder{
+    private static class RecycleHolder extends RecyclerView.ViewHolder{
 
         private final TextView mName;
 

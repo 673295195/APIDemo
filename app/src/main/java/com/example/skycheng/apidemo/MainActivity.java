@@ -446,7 +446,7 @@ public class MainActivity extends AppCompatActivity implements SeekBar.OnSeekBar
             return true;
             //表示超出范围
         } else {
-            Toast.makeText(this, "对不起,不在范围内,无法领奖", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "距离商家太远,请靠近试试", Toast.LENGTH_SHORT).show();
             return false;
         }
     }

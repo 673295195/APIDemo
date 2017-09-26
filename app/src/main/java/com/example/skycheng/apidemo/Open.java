@@ -37,6 +37,7 @@ public class Open extends AppCompatActivity{
             public void onClick(View v) {
                 Intent intent=new Intent(Open.this,MGCoinRecord.class);
                 startActivity(intent);
+                finish();
             }
         });
     }

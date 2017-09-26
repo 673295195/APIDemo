@@ -5,11 +5,90 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="com.example.skycheng.apidemo.MGCoinRecord">
+
+    <RelativeLayout
+        android:id="@+id/top"
+        android:layout_width="match_parent"
+        android:layout_weight="1"
+        android:layout_height="0dp"
+        android:background="#D85940"
+        >
+
+        <Button
+            android:onClick="coinClose"
+            android:id="@+id/close"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:background="#D85940"
+            android:text="关闭"
+            android:textColor="@color/yellow"/>
+
+        <TextView
+            android:gravity="center"
+            android:layout_centerHorizontal="true"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="收到的红包"
+            android:textColor="@color/yellow"
+            android:textSize="20dp"
+            />
+
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="3">
+
+        <ImageButton
+            android:layout_marginTop="10dp"
+            android:id="@+id/head_img"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/ic_launcher"/>
+
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/head_img"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:text="系统用户共收到"
+            android:textColor="#383A38"
+            android:textSize="18sp"/>
+
+        <!--<TextView-->
+            <!--android:id="@+id/textView1"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_below="@+id/name"-->
+            <!--android:layout_centerHorizontal="true"-->
+            <!--android:layout_marginTop="5dp"-->
+            <!--android:text="给你发了一个红包"-->
+            <!--android:textColor="#383A38"-->
+            <!--android:textSize="15sp"/>-->
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/name"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:text="110.01元"
+            android:textColor="#383A38"
+            android:textSize="30sp"/>
+
+    </RelativeLayout>
 <android.support.v7.widget.RecyclerView
     android:id="@+id/recycle"
+    android:layout_weight="5"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="0dp">
 
 </android.support.v7.widget.RecyclerView>
 </LinearLayout>
