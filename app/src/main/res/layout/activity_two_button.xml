@@ -5,7 +5,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.skycheng.apidemo.TwoButton">
+    tools:context="com.example.skycheng.apidemo.ui.TwoButton">
 <Button
     android:id="@+id/two"
     android:layout_width="match_parent"

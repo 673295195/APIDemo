@@ -1,10 +1,9 @@
-package com.example.skycheng.apidemo;
+package com.example.skycheng.apidemo.ui;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.Typeface;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
@@ -30,11 +29,14 @@ import com.amap.api.maps2d.model.LatLng;
 import com.amap.api.maps2d.model.Marker;
 import com.amap.api.maps2d.model.MarkerOptions;
 import com.amap.api.maps2d.model.MyLocationStyle;
-import com.amap.api.maps2d.model.Text;
-import com.amap.api.maps2d.model.TextOptions;
+import com.example.skycheng.apidemo.Constants;
+import com.example.skycheng.apidemo.LuckeyDialog;
+import com.example.skycheng.apidemo.OpenSuccess;
+import com.example.skycheng.apidemo.R;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Random;
 
 import static com.amap.api.mapcore.util.db.v;
 import static com.example.skycheng.apidemo.R.id.map;
@@ -67,6 +69,7 @@ public class MainActivity extends AppCompatActivity implements SeekBar.OnSeekBar
     private Marker marker2;
     private TextView markerText;
     private Intent mContext;
+    private final float R1= (float) 200.0;
 
 
     @Override
@@ -89,22 +92,43 @@ public class MainActivity extends AppCompatActivity implements SeekBar.OnSeekBar
     private void addHongBao() {
         //1北京
         //文字显示标注，可以设置显示内容，位置，字体大小颜色，背景色旋转角度,Z值等
-        TextOptions textOptions = new TextOptions().position(Constants.BEIJING)
+       /* TextOptions textOptions = new TextOptions().position(Constants.BEIJING)
                 .text("Text").fontColor(Color.BLACK)
                 .backgroundColor(Color.BLUE).fontSize(30).rotate(20).align(Text.ALIGN_CENTER_HORIZONTAL,
                         Text.ALIGN_CENTER_VERTICAL)
                 .zIndex(1.f).typeface(Typeface.DEFAULT_BOLD);
-        aMap.addText(textOptions);
+        aMap.addText(textOptions);*/
 
         //2成都
-        aMap.addMarker(new MarkerOptions().anchor(0.5f, 0.5f)
+       /* aMap.addMarker(new MarkerOptions().anchor(0.5f, 0.5f)
                 .position(Constants.CHENGDU).title("成都市")
-                .snippet("成都市:30.679879, 104.064855").draggable(true));
+                .snippet("成都市:30.679879, 104.064855").draggable(true));*/
         //东莞
         aMap.addMarker(new MarkerOptions().anchor(0.5f, 0.5f)
                 .position(new LatLng(22.9468146495, 113.8909184933)).title("东莞市")
                 .snippet("东莞市:松山湖").draggable(true));
+       // LatLng latLng=new LatLng(lat,lon);
+        //lat: 22.947299 lon: 113.890437 定位坐标
 
+
+            //随机地点
+            Random random = new Random(1);
+            double r = random.nextDouble()*0.001;
+            double lat = 22.947299 + r;
+            double lon = 113.890437 + r;
+            LatLng latLng1=new LatLng(lat,lon);
+            Log.e(TAG, "addHongBao: "+r );
+
+            markerOption = new MarkerOptions();
+            markerOption.position(latLng1);
+            markerOption.title("沙县小吃").snippet("剩余5个红包");
+
+            markerOption.draggable(true);
+            markerOption.icon(BitmapDescriptorFactory
+                    .fromResource(R.drawable.xiao));
+            marker2 = aMap.addMarker(markerOption);
+
+      //  Log.e(TAG, "addHongBao: len"+list.size() );
 
         //3西安
         markerOption = new MarkerOptions();
@@ -401,7 +425,7 @@ public class MainActivity extends AppCompatActivity implements SeekBar.OnSeekBar
         Log.e(TAG, "22.9471703230,113.8910579681:= " + calculateLineDistance + "米");
 
         //判断是否在范围内,在则弹出红包
-        if (calculateLineDistance <= 200) {
+        if (calculateLineDistance <= R1) {
             // Log.d(TAG, "onMarkerClick: " + marker);
 
 
@@ -411,8 +435,8 @@ public class MainActivity extends AppCompatActivity implements SeekBar.OnSeekBar
             builder.setOpenButton("", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
 
-                    //TODO  需要判断 红包是否领取成功
-                    Intent intent = new Intent(MainActivity.this, Open.class);
+                    //TODO  需要判断 红包是否领取成功,每个账号一天只能另一个
+                    Intent intent = new Intent(MainActivity.this, OpenSuccess.class);
                     startActivity(intent);
                     dialog.dismiss();
                 }
@@ -440,7 +464,7 @@ public class MainActivity extends AppCompatActivity implements SeekBar.OnSeekBar
 //            Intent intent = new Intent(this, HongActivity.class);
 //            startActivity(intent);
 
-            markerText.setText("你点击的是" + marker.getTitle());
+           // markerText.setText("你点击的是" + marker.getTitle());
 
             //true表示消费该事件,可以点击
             return true;

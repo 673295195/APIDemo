@@ -1,4 +1,4 @@
-package com.example.skycheng.apidemo;
+package com.example.skycheng.apidemo.ui;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -8,6 +8,10 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.LinearLayout;
+
+import com.example.skycheng.apidemo.LuckeyDialog;
+import com.example.skycheng.apidemo.OpenSuccess;
+import com.example.skycheng.apidemo.R;
 
 import static com.example.skycheng.apidemo.R.style.Dialog;
 
@@ -38,7 +42,7 @@ public class HongActivity extends AppCompatActivity {
                 builder.setName("系统");
                 builder.setOpenButton("", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        Intent intent = new Intent(mContext, Open.class);
+                        Intent intent = new Intent(mContext, OpenSuccess.class);
                         startActivity(intent);
                         dialog.dismiss();
                     }

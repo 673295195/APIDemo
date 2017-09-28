@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.skycheng.apidemo.ThreeDMap">
+    tools:context="com.example.skycheng.apidemo.ui.ThreeDMap">
 <com.amap.api.maps.MapView
     android:layout_width="match_parent"
     android:layout_height="match_parent">

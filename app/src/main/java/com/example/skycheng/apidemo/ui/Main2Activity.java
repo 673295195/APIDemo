@@ -1,4 +1,4 @@
-package com.example.skycheng.apidemo;
+package com.example.skycheng.apidemo.ui;
 
 import android.graphics.Color;
 import android.location.Location;
@@ -17,6 +17,7 @@ import com.amap.api.maps2d.model.Circle;
 import com.amap.api.maps2d.model.CircleOptions;
 import com.amap.api.maps2d.model.LatLng;
 import com.amap.api.maps2d.model.MyLocationStyle;
+import com.example.skycheng.apidemo.R;
 
 import static com.example.skycheng.apidemo.R.id.map;
 

@@ -69,9 +69,9 @@ public class MGCoinRecord extends AppCompatActivity {
 
 
         public void setBindData(int position) {
-            for (int i = 0; i < 10; i++) {
-                mName.setText("小明"+i);
-            }
+
+                mName.setText("小明");
+
         }
     }
 }
