@@ -8,12 +8,11 @@ import android.widget.Button;
 
 import com.example.skycheng.apidemo.LocationAndPacket;
 import com.example.skycheng.apidemo.R;
-
-import java.io.Serializable;
+import com.example.skycheng.apidemo.SellerBean;
 
 public class TwoButton extends AppCompatActivity {
 
-    private Serializable mSeller;
+    private SellerBean mSeller;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,6 +21,13 @@ public class TwoButton extends AppCompatActivity {
 
         Button two= (Button) findViewById(R.id.two);
         Button three= (Button) findViewById(R.id.three);
+//        mSeller.setID("01");
+//        mSeller.setName("小明");
+//        mSeller.setRedPacket(1.0);
+//        mSeller.setLat(22.948299);
+//        mSeller.setLon(113.891437);
+
+
         two.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -29,7 +35,12 @@ public class TwoButton extends AppCompatActivity {
 //                startActivity(intent1);
                 Intent intent=new Intent(TwoButton.this,LocationAndPacket.class);
                 Bundle bundle = new Bundle();
-                bundle.putSerializable("Seller",mSeller);
+                //bundle.putSerializable("Seller",mSeller);
+                bundle.putString("name","小明");
+                bundle.putString("ID","01");
+                bundle.putDouble("Packet",1.0);
+                bundle.putDouble("lat",22.948299);
+                bundle.putDouble("lon",113.891437);
                 startActivity(intent);
             }
         });

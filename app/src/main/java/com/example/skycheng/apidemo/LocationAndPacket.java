@@ -39,7 +39,8 @@ import static com.example.skycheng.apidemo.R.id.map;
 
 
 public class LocationAndPacket extends AppCompatActivity implements SeekBar.OnSeekBarChangeListener
-        , AMap.OnMyLocationChangeListener, RadioGroup.OnCheckedChangeListener, AMap.OnMarkerClickListener {
+        , AMap.OnMyLocationChangeListener, RadioGroup.OnCheckedChangeListener, AMap.OnMarkerClickListener,
+        AMap.OnMapClickListener, AMap.OnMapLongClickListener {
 
 
     private static final String TAG = "MainActivity";
@@ -65,7 +66,12 @@ public class LocationAndPacket extends AppCompatActivity implements SeekBar.OnSe
     private Marker marker2;
     private TextView markerText;
     private Intent mContext;
-    private final float R1= (float) 200.0;
+    private final float R1 = (float) 200.0;
+    private SellerBean mSeller;
+    private double mLat;
+    private double mLon;
+    private double mPacket;
+    private LatLng mLatLng;
 
 
     @Override
@@ -87,10 +93,17 @@ public class LocationAndPacket extends AppCompatActivity implements SeekBar.OnSe
     }
 
     private void initIntent() {
-        if (getIntent()!=null){
+        if (getIntent() != null) {
             Intent intent = getIntent();
-            Bundle bundle = intent.getExtras();
-            SellerBean seller = (SellerBean) bundle.getSerializable("Seller");
+            intent.getStringExtra("name");
+            intent.getStringExtra("ID");
+            mLat = intent.getDoubleExtra("lat", 22.948299);
+            mLon = intent.getDoubleExtra("lon", 113.891437);
+            // mLon = intent.getStringExtra("lon");
+            mPacket = intent.getDoubleExtra("Packet", 1.0);
+            // Bundle bundle = intent.getExtras();
+            //mSeller = (SellerBean) bundle.getSerializable("Seller");
+
 
         }
     }
@@ -119,11 +132,11 @@ public class LocationAndPacket extends AppCompatActivity implements SeekBar.OnSe
 
         //随机地点
         Random random = new Random(1);
-        double r = random.nextDouble()*0.001;
+        double r = random.nextDouble() * 0.001;
         double lat = 22.947299 + r;
         double lon = 113.890437 + r;
-        LatLng latLng1=new LatLng(lat,lon);
-        Log.e(TAG, "addHongBao: "+r );
+        LatLng latLng1 = new LatLng(lat, lon);
+        Log.e(TAG, "addHongBao: " + r);
 
         markerOption = new MarkerOptions();
         markerOption.position(latLng1);
@@ -170,8 +183,26 @@ public class LocationAndPacket extends AppCompatActivity implements SeekBar.OnSe
                 .fromResource(R.drawable.xiao));
         marker2 = aMap.addMarker(markerOption);
 
+        //商家
+
+        markerOption = new MarkerOptions();
+        markerOption.position(new LatLng(mLat, mLon));
+        markerOption.title("沙县小吃").snippet("剩余5个红包");
+
+        markerOption.draggable(true);
+        markerOption.icon(BitmapDescriptorFactory
+                .fromResource(R.drawable.xiao));
+        marker2 = aMap.addMarker(markerOption);
+
+
         //添加地图上红包的点击事件
         aMap.setOnMarkerClickListener(this);
+
+        // aMap.setOnMapClickListener(this);// 对amap添加单击地图事件监听器
+        // aMap.setOnMapLongClickListener(this);// 对amap添加长按地图事件监听器
+
+
+
         /*mMapView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -216,7 +247,7 @@ public class LocationAndPacket extends AppCompatActivity implements SeekBar.OnSe
      * 初始化AMap对象
      */
     private void init() {
-        mColorBar = (SeekBar) findViewById(R.id.hueSeekBar);
+    /*    mColorBar = (SeekBar) findViewById(R.id.hueSeekBar);
         mColorBar.setMax(HUE_MAX);
         mColorBar.setProgress(50);
 
@@ -226,16 +257,18 @@ public class LocationAndPacket extends AppCompatActivity implements SeekBar.OnSe
 
         mWidthBar = (SeekBar) findViewById(R.id.widthSeekBar);
         mWidthBar.setMax(WIDTH_MAX);
-        mWidthBar.setProgress(25);
+        mWidthBar.setProgress(25);*/
         if (aMap == null) {
             aMap = mMapView.getMap();
             setUpMap();
         }
-        mGPSModeGroup = (RadioGroup) findViewById(R.id.gps_radio_group);
-        mGPSModeGroup.setOnCheckedChangeListener(this);
+      /*  mGPSModeGroup = (RadioGroup) findViewById(R.id.gps_radio_group);
+        mGPSModeGroup.setOnCheckedChangeListener(this);*/
 
         //设置SDK 自带定位消息监听
         aMap.setOnMyLocationChangeListener(this);
+
+
     }
 
 
@@ -254,6 +287,7 @@ public class LocationAndPacket extends AppCompatActivity implements SeekBar.OnSe
         myLocationStyle.radiusFillColor(Color.argb(0, 0, 0, 0));// 设置圆形的填充颜色  。
         aMap.getUiSettings().setMyLocationButtonEnabled(true);// 设置默认定位按钮是否显示
         aMap.setMyLocationEnabled(true);// 设置为true表示显示定位层并可触发定位，false表示隐藏定位层并不可触发定位，默认是false
+
 
         //circleAndLocation();
 //        Log.d(TAG, "setUpMap: 1");
@@ -408,7 +442,7 @@ public class LocationAndPacket extends AppCompatActivity implements SeekBar.OnSe
 //        location.setLongitude(113.8910579681);
 //        float v1 = mLocation.distanceTo(location);
 //        Log.e(TAG, "onMarkerClick: 经纬度距离"+ v1);
-//SHAXIAN1 = new LatLng(22.9491703230,113.8910579681)
+//        SHAXIAN1 = new LatLng(22.9491703230,113.8910579681)
 
 
 //        double Lat1 = rad(22.9471703230);
@@ -421,19 +455,25 @@ public class LocationAndPacket extends AppCompatActivity implements SeekBar.OnSe
 //        s = s * EARTH_RADIUS;
 //        //s为2个点之间的距离
 //        s = Math.round(s * 10000) / 10000;
-//        Log.e(TAG, "onMarkerClick: 距离s=" + s + "米");
-
+        //Log.e(TAG, "onMarkerClick: 距离s=" + "米");
+        // aMap.setOnMapClickListener(this);
         //计算2个经纬度之间的距离,精准度更高
-        LatLng latlng2 = new LatLng(22.9471703230, 113.8910579681);
-        LatLng latlng1 = new LatLng(mWEI, mJING);
-        float calculateLineDistance = AMapUtils.calculateLineDistance(latlng1, latlng2);
+        double longitude = marker.getPosition().longitude;
+        double latitude = marker.getPosition().latitude;
 
-        Log.e(TAG, "22.9471703230,113.8910579681:= " + calculateLineDistance + "米");
+        LatLng latlng2 = new LatLng(22.9471703230, 113.8910579681);
+        LatLng latlng3 = new LatLng(latitude, longitude);
+        LatLng latlng1 = new LatLng(mWEI, mJING);
+        Log.e(TAG, "onMarkerClick: 定位" + mWEI + "==" + mJING);
+        float calculateLineDistance = AMapUtils.calculateLineDistance(latlng1, latlng3);
+
+
+
+        Log.e(TAG, "2点距离marker:= " + calculateLineDistance + "米");
 
         //判断是否在范围内,在则弹出红包
-        if (calculateLineDistance <= R1) {
+        if (calculateLineDistance <= R1 && calculateLineDistance > 0) {
             // Log.d(TAG, "onMarkerClick: " + marker);
-
 
             //弹出比例红包
             LuckeyDialog.Builder builder = new LuckeyDialog.Builder(LocationAndPacket.this, R.style.Dialog);//调用style中的Diaog
@@ -443,6 +483,9 @@ public class LocationAndPacket extends AppCompatActivity implements SeekBar.OnSe
 
                     //TODO  需要判断 红包是否领取成功,每个账号一天只能另一个
                     Intent intent = new Intent(LocationAndPacket.this, OpenSuccess.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("Seller", mPacket);
+                    intent.putExtras(bundle);
                     startActivity(intent);
                     dialog.dismiss();
                 }
@@ -467,23 +510,49 @@ public class LocationAndPacket extends AppCompatActivity implements SeekBar.OnSe
 
             dialog.show();
 
-//            Intent intent = new Intent(this, HongActivity.class);
-//            startActivity(intent);
-
-            // markerText.setText("你点击的是" + marker.getTitle());
 
             //true表示消费该事件,可以点击
+            //TODO
             return true;
             //表示超出范围
-        } else {
+        } else if (calculateLineDistance > 200) {
             Toast.makeText(this, "距离商家太远,请靠近试试", Toast.LENGTH_SHORT).show();
             return false;
+        } else {
+            return false;
         }
+
     }
 
-    private static double rad(double d) {
-        return d * Math.PI / 180.0;
+    //TODO 点击坐标
+    @Override
+    public void onMapClick(LatLng latLng) {
+
+        mLatLng = latLng;
+        double latitude = mLatLng.latitude;
+        double longitude = mLatLng.longitude;
+        Log.e(TAG, "onMapClick: 点击坐标" + latitude + "==" + longitude);
+
+        LatLng latlng1 = new LatLng(mWEI, mJING);
+        Log.e(TAG, "onMarkerClick: 定位" + mWEI + "==" + mJING);
+        float calculateLineDistance = AMapUtils.calculateLineDistance(latlng1, mLatLng);
+
+        Log.e(TAG, "2点距离marker:= " + calculateLineDistance + "米");
+/*
+        //判断是否在范围内,在则弹出红包
+        if (calculateLineDistance<=200&&calculateLineDistance>0){
+            //aMap.setOnMarkerClickListener(this);
+            Toast.makeText(this, "距离商家"+calculateLineDistance+"米", Toast.LENGTH_SHORT).show();
+        }else if (calculateLineDistance>200){
+            Toast.makeText(this, "距离商家太远,请靠近试试", Toast.LENGTH_SHORT).show();
+        }else {
+            Toast.makeText(this, "距离商家"+calculateLineDistance+"米", Toast.LENGTH_SHORT).show();
+        }*/
     }
 
+    @Override
+    public void onMapLongClick(LatLng latLng) {
+
+    }
 }
 

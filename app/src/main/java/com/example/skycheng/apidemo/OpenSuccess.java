@@ -20,13 +20,30 @@ public class OpenSuccess extends AppCompatActivity{
     private TextView mName;
     private TextView mMoney;
     private TextView mSearch;
+    private SellerBean mSeller;
+    private double mADouble;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.open);
         initView();
+        initIntent();
         onListener();
+        initData();
+    }
+
+    private void initData() {
+        mMoney.setText(mADouble+"");
+    }
+
+    private void initIntent() {
+        if (getIntent()!=null){
+            Intent intent = getIntent();
+            Bundle bundle = intent.getExtras();
+            mADouble = bundle.getDouble("Seller");
+            // mSeller = (SellerBean) bundle.getSerializable("Seller");
+        }
     }
 
     private void onListener() {

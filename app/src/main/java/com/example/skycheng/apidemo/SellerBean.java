@@ -13,6 +13,12 @@ public class SellerBean implements Serializable {
     private double lat;
     private double lon;
 
+//    mSeller.setID("01");
+//        mSeller.setName("小明");
+//        mSeller.setRedPacket(1.0);
+//        mSeller.setLat(22.948299);
+//        mSeller.setLon(113.891437);
+
     public String getID() {
         return ID;
     }
