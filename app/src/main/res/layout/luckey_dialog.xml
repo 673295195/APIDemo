@@ -23,17 +23,17 @@
     </LinearLayout>
 
     <!-- 头像以及相关文字 -->
-    <LinearLayout
-        android:layout_below="@+id/top"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="10"
-        android:orientation="vertical">
+    <!--<LinearLayout-->
+        <!--android:layout_below="@+id/top"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="0dp"-->
+        <!--android:layout_weight="10"-->
+        <!--android:orientation="vertical">-->
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="3">
+            android:layout_weight="5">
 
             <ImageButton
                 android:id="@+id/head_img"
@@ -81,15 +81,17 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="3">
+            android:layout_weight="5">
 
             <Button
+                android:background="@drawable/btn_round"
                 android:id="@+id/open_btn"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:background="@drawable/button"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
                 android:layout_marginTop="20dp"
+                android:textSize="32dp"
                 android:layout_centerHorizontal="true" />
+
 
         </RelativeLayout>
 
@@ -108,6 +110,6 @@
 
         <!--</RelativeLayout>-->
 
-    </LinearLayout>
+    <!--</LinearLayout>-->
 
 </LinearLayout>

@@ -47,7 +47,7 @@ public class TwoButton extends AppCompatActivity {
         three.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent2=new Intent(TwoButton.this,Main2Activity.class);
+                Intent intent2=new Intent(TwoButton.this,ThreeDMap.class);
                 startActivity(intent2);
 
             }

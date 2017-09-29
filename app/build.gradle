@@ -37,4 +37,5 @@ dependencies {
     compile 'com.amap.api:search:latest.integration'
     testCompile 'junit:junit:4.12'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.6.0'
+    compile 'com.github.markushi:circlebutton:1.1'
 }

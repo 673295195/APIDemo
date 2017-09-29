@@ -115,6 +115,7 @@ public class LuckeyDialog extends Dialog {
             View layout = inflater.inflate(R.layout.luckey_dialog, null);
 
             red_page = (Button) layout.findViewById(R.id.open_btn);
+            //red_page.setText("开");
 //            <span style = "color:#ff0000;" >//red指的是需要播放动画的ImageView控件
 //                    AnimationDrawable
 //            animationDrawable = (AnimationDrawable) red_page.getBackground();
@@ -129,7 +130,7 @@ public class LuckeyDialog extends Dialog {
             //设置拆红包的按钮
             if (openButtonText != null) {
                 ((Button) layout.findViewById(R.id.open_btn))
-                        .setText(openButtonText);
+                        .setText("開");
                 if (openButtonClickListener != null) {
                     ((Button) layout.findViewById(R.id.open_btn))
                             .setOnClickListener(new View.OnClickListener() {
