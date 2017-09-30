@@ -9,11 +9,13 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.example.skycheng.apidemo.ui.OkHttpUtil;
+
 /**
  * Created by SkyCheng on 2017/9/25.
  */
 
-public class OpenSuccess extends AppCompatActivity{
+public class OpenSuccess extends AppCompatActivity {
 
     private Button mClose;
     private ImageButton mHeadImage;
@@ -21,36 +23,45 @@ public class OpenSuccess extends AppCompatActivity{
     private TextView mMoney;
     private TextView mSearch;
     private SellerBean mSeller;
-    private double mADouble;
+    //private double mADouble;
+    private String mADouble;
+    private OkHttpUtil mOkHttpUtil;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.open);
+        setContentView(R.layout.open_success);
+        //初始化
         initView();
+        //获取传递数据
         initIntent();
+        //红包明细
         onListener();
+        //显示数据
         initData();
     }
 
     private void initData() {
-        mMoney.setText(mADouble+"");
+        mMoney.setText(mADouble);
     }
 
     private void initIntent() {
-        if (getIntent()!=null){
-            Intent intent = getIntent();
-            Bundle bundle = intent.getExtras();
-            mADouble = bundle.getDouble("Seller");
-            // mSeller = (SellerBean) bundle.getSerializable("Seller");
+        if (getIntent() != null) {
+            mADouble = getIntent().getStringExtra("money");
         }
+/*            Bundle bundle = intent.getExtras();
+            mADouble = bundle.getDouble("Seller");
+             mSeller = (SellerBean) bundle.getSerializable("Seller");
+        }*/
     }
 
     private void onListener() {
         mSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(OpenSuccess.this,MGCoinRecord.class);
+                //todo 获取消费者红包记录
+                // mOkHttpUtil.loadBuyerPacketRecord();
+                Intent intent = new Intent(OpenSuccess.this, MGCoinRecord.class);
                 startActivity(intent);
                 //finish();
             }
@@ -65,6 +76,7 @@ public class OpenSuccess extends AppCompatActivity{
         mSearch = (TextView) findViewById(R.id.search);
     }
 
+    //关闭
     public void close(View view) {
         finish();
     }

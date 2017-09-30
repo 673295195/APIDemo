@@ -14,6 +14,7 @@ public class MGCoinRecord extends AppCompatActivity {
 
     private RecyclerView mRecycle;
     private Context mContext;
+    private BuyerBean mBuyerBean;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,8 +35,13 @@ public class MGCoinRecord extends AppCompatActivity {
         finish();
     }
 
+    public void getData(BuyerBean buyerBean) {
 
-    private class RecycleAdapter extends RecyclerView.Adapter{
+        mBuyerBean = buyerBean;
+    }
+
+
+    private class RecycleAdapter extends RecyclerView.Adapter {
 
         private RecycleHolder mRecycleHolder;
 
@@ -48,7 +54,7 @@ public class MGCoinRecord extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-            mRecycleHolder= (RecycleHolder) holder;
+            mRecycleHolder = (RecycleHolder) holder;
             mRecycleHolder.setBindData(position);
         }
 
@@ -58,7 +64,7 @@ public class MGCoinRecord extends AppCompatActivity {
         }
     }
 
-    private static class RecycleHolder extends RecyclerView.ViewHolder{
+    private static class RecycleHolder extends RecyclerView.ViewHolder {
 
         private final TextView mName;
 
@@ -70,7 +76,7 @@ public class MGCoinRecord extends AppCompatActivity {
 
         public void setBindData(int position) {
 
-                mName.setText("小明");
+            mName.setText("小明");
 
         }
     }

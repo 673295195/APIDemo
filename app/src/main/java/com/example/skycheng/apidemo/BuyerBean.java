@@ -4,7 +4,7 @@ package com.example.skycheng.apidemo;
  * Created by SkyCheng on 2017/9/28.
  */
 
-public class Buyer {
+public class BuyerBean {
     private String name;
     private  String ID;
     private double money;

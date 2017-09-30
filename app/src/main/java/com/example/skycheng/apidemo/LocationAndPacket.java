@@ -8,7 +8,6 @@ import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Display;
 import android.view.Window;
 import android.view.WindowManager;
@@ -29,6 +28,7 @@ import com.amap.api.maps2d.model.LatLng;
 import com.amap.api.maps2d.model.Marker;
 import com.amap.api.maps2d.model.MarkerOptions;
 import com.amap.api.maps2d.model.MyLocationStyle;
+import com.example.skycheng.apidemo.ui.OkHttpUtil;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -72,6 +72,9 @@ public class LocationAndPacket extends AppCompatActivity implements SeekBar.OnSe
     private double mLon;
     private double mPacket;
     private LatLng mLatLng;
+    private OkHttpUtil mOkHttpUtil;
+    private String mString;
+    private SellerBean mSellerBean;
 
 
     @Override
@@ -84,7 +87,7 @@ public class LocationAndPacket extends AppCompatActivity implements SeekBar.OnSe
         //初始化地图
         init();
 
-        initIntent();
+        // initIntent();
 
         //加入红包功能
         addHongBao();
@@ -109,6 +112,8 @@ public class LocationAndPacket extends AppCompatActivity implements SeekBar.OnSe
     }
 
     private void addHongBao() {
+        //TODO for循环添加marker
+
         //1北京
         //文字显示标注，可以设置显示内容，位置，字体大小颜色，背景色旋转角度,Z值等
        /* TextOptions textOptions = new TextOptions().position(Constants.BEIJING)
@@ -136,7 +141,7 @@ public class LocationAndPacket extends AppCompatActivity implements SeekBar.OnSe
         double lat = 22.947299 + r;
         double lon = 113.890437 + r;
         LatLng latLng1 = new LatLng(lat, lon);
-        Log.e(TAG, "addHongBao: " + r);
+
 
         markerOption = new MarkerOptions();
         markerOption.position(latLng1);
@@ -150,7 +155,7 @@ public class LocationAndPacket extends AppCompatActivity implements SeekBar.OnSe
         //  Log.e(TAG, "addHongBao: len"+list.size() );
 
         //3西安
-        markerOption = new MarkerOptions();
+        // markerOption = new MarkerOptions();
         markerOption.position(Constants.XIAN);
         markerOption.title("西安市").snippet("坐标：34.341568, 108.940174");
         markerOption.draggable(true);
@@ -162,7 +167,7 @@ public class LocationAndPacket extends AppCompatActivity implements SeekBar.OnSe
         marker2.setRotateAngle(90);
 
         //3沙县
-        markerOption = new MarkerOptions();
+        //markerOption = new MarkerOptions();
         markerOption.position(Constants.SHAXIAN);
         markerOption.title("兰州拉面").snippet("剩余10个红包");
         markerOption.draggable(true);
@@ -174,7 +179,7 @@ public class LocationAndPacket extends AppCompatActivity implements SeekBar.OnSe
         // marker旋转90度
         //marker2.setRotateAngle(90);
         //33沙县
-        markerOption = new MarkerOptions();
+        //markerOption = new MarkerOptions();
         markerOption.position(Constants.SHAXIAN1);
         markerOption.title("沙县小吃").snippet("剩余5个红包");
 
@@ -185,7 +190,7 @@ public class LocationAndPacket extends AppCompatActivity implements SeekBar.OnSe
 
         //商家
 
-        markerOption = new MarkerOptions();
+        // markerOption = new MarkerOptions();
         markerOption.position(new LatLng(mLat, mLon));
         markerOption.title("沙县小吃").snippet("剩余5个红包");
 
@@ -268,7 +273,12 @@ public class LocationAndPacket extends AppCompatActivity implements SeekBar.OnSe
         //设置SDK 自带定位消息监听
         aMap.setOnMyLocationChangeListener(this);
 
+        //loadNetData();
+    }
 
+    //todo 加载商家bean数据
+    private void loadNetData() {
+        //mOkHttpUtil.getSellerBean();
     }
 
     /**
@@ -355,10 +365,11 @@ public class LocationAndPacket extends AppCompatActivity implements SeekBar.OnSe
     public void onMyLocationChange(Location location) {  //位置改变是调用
         mLocation = location;
 
-        Log.d(TAG, "onMyLocationChange: wei:" + mWEI + "+++" + mJING);
+        LogUtils.log(TAG, "onMyLocationChange: wei:" + mWEI + "+++" + mJING);
+
         // 定位回调监听
         if (location != null) {
-            Log.e("amap", "onMyLocationChange 定位成功， lat: " + location.getLatitude() + " lon: " + location.getLongitude());
+            LogUtils.log("amap", "onMyLocationChange 定位成功， lat: " + location.getLatitude() + " lon: " + location.getLongitude());
             Bundle bundle = location.getExtras();
             if (bundle != null) {
                 int errorCode = bundle.getInt(MyLocationStyle.ERROR_CODE);
@@ -370,7 +381,7 @@ public class LocationAndPacket extends AppCompatActivity implements SeekBar.OnSe
                 errorInfo
                 locationType
                 */
-                Log.e("amap", "定位信息， code: " + errorCode + " errorInfo: " + errorInfo + " locationType: " + locationType);
+                LogUtils.log("amap", "定位信息， code: " + errorCode + " errorInfo: " + errorInfo + " locationType: " + locationType);
                 // circleAndLocation();
                 mJING = mLocation.getLongitude();
                 mWEI = mLocation.getLatitude();
@@ -379,15 +390,15 @@ public class LocationAndPacket extends AppCompatActivity implements SeekBar.OnSe
                 circleAndLocation();
                 //float v = mLocation.distanceTo(location);
 
-                Log.e(TAG, "onMyLocationChange1: " + v);
+                LogUtils.log(TAG, "onMyLocationChange1: " + v);
 
             } else {
-                Log.e("amap", "定位信息， bundle is null ");
+                LogUtils.log("amap", "定位信息， bundle is null ");
 
             }
 
         } else {
-            Log.e("amap", "定位失败");
+            LogUtils.log("amap", "定位失败");
         }
     }
 
@@ -434,27 +445,33 @@ public class LocationAndPacket extends AppCompatActivity implements SeekBar.OnSe
         LatLng latlng1 = new LatLng(mWEI, mJING);
 
         LogUtils.log("onMarkerClick: 定位" + mWEI + "==" + mJING);
-        //Log.e(TAG, "onMarkerClick: 定位" + mWEI + "==" + mJING);
         float calculateLineDistance = AMapUtils.calculateLineDistance(latlng1, latlng3);
 
         LogUtils.log("2点距离marker:= " + calculateLineDistance + "米");
-        //Log.e(TAG, "2点距离marker:= " + calculateLineDistance + "米");
 
         //判断是否在范围内,在则弹出红包
         if (calculateLineDistance <= R1 && calculateLineDistance > 0) {
-            // Log.d(TAG, "onMarkerClick: " + marker);
 
             //弹出比例红包
             LuckeyDialog.Builder builder = new LuckeyDialog.Builder(LocationAndPacket.this, R.style.Dialog);//调用style中的Diaog
-            builder.setName("系统");
+            //设置商家名字
+            builder.setName("商家1");
+
+            //商家头像
+            builder.setHeadImage(R.drawable.redred);
+
             builder.setOpenButton("", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
 
                     //TODO  需要判断 红包是否领取成功,每个账号一天只能另一个
+                    //获取红包金额
+                    // mOkHttpUtil.getPacketMoney();
+
                     Intent intent = new Intent(LocationAndPacket.this, OpenSuccess.class);
-                    Bundle bundle = new Bundle();
-                    bundle.putSerializable("Seller", mPacket);
-                    intent.putExtras(bundle);
+//                    Bundle bundle = new Bundle();
+//                    bundle.putSerializable("Seller", mPacket);
+//                    intent.putExtras(bundle);
+                    intent.putExtra("money", "11");
                     startActivity(intent);
                     dialog.dismiss();
                 }
@@ -501,21 +518,30 @@ public class LocationAndPacket extends AppCompatActivity implements SeekBar.OnSe
         double longitude = mLatLng.longitude;
 
         LogUtils.log("onMapClick: 点击坐标" + latitude + "==" + longitude);
-       // Log.e(TAG, "onMapClick: 点击坐标" + latitude + "==" + longitude);
 
         LatLng latlng1 = new LatLng(mWEI, mJING);
 
-        //LogUtils.log("onMarkerClick: 定位" + mWEI + "==" + mJING);
-        //Log.e(TAG, "onMarkerClick: 定位" + mWEI + "==" + mJING);
+
         float calculateLineDistance = AMapUtils.calculateLineDistance(latlng1, mLatLng);
 
-        LogUtils.log("2个marker间距离="+calculateLineDistance+"米");
-        //Log.e(TAG, "2点距离marker:= " + calculateLineDistance + "米");
+        LogUtils.log("2个marker间距离=" + calculateLineDistance + "米");
     }
 
     @Override
     public void onMapLongClick(LatLng latLng) {
 
+    }
+
+    //网络获取的商家数据
+    public void setdata(SellerBean sellerBean) {
+
+        mSellerBean = sellerBean;
+    }
+
+    //获取红包金额
+    public void getMoney(String string) {
+
+        mString = "string";
     }
 }
 
