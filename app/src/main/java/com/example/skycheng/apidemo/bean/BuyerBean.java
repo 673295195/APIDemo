@@ -1,4 +1,4 @@
-package com.example.skycheng.apidemo;
+package com.example.skycheng.apidemo.bean;
 
 /**
  * Created by SkyCheng on 2017/9/28.

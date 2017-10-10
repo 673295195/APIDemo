@@ -1,4 +1,4 @@
-package com.example.skycheng.apidemo;
+package com.example.skycheng.apidemo.util;
 
 import com.amap.api.maps2d.model.LatLng;
 

@@ -1,4 +1,4 @@
-package com.example.skycheng.apidemo;
+package com.example.skycheng.apidemo.view;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -9,6 +9,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.example.skycheng.apidemo.R;
+import com.example.skycheng.apidemo.bean.BuyerBean;
 
 public class MGCoinRecord extends AppCompatActivity {
 

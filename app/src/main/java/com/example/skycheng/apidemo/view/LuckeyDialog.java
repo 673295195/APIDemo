@@ -1,4 +1,4 @@
-package com.example.skycheng.apidemo;
+package com.example.skycheng.apidemo.view;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
+
+import com.example.skycheng.apidemo.R;
 
 /**
  * Created by SkyCheng on 2017/9/25.
@@ -114,7 +116,6 @@ public class LuckeyDialog extends Dialog {
 
 
         public void setHeadImage(int image) {
-
 
             mImageHead = image;
         }

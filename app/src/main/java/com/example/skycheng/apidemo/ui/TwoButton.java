@@ -6,9 +6,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 
-import com.example.skycheng.apidemo.LocationAndPacket;
+import com.example.skycheng.apidemo.view.LocationAndPacket;
 import com.example.skycheng.apidemo.R;
-import com.example.skycheng.apidemo.SellerBean;
+import com.example.skycheng.apidemo.bean.SellerBean;
 
 public class TwoButton extends AppCompatActivity {
 

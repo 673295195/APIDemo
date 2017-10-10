@@ -17,8 +17,8 @@
             android:id="@+id/close"
             android:layout_width="32dp"
             android:layout_height="32dp"
-            android:background="@drawable/close"
-            android:layout_margin="5dp"/>
+            android:layout_margin="5dp"
+            android:background="@drawable/close"/>
 
     </LinearLayout>
 

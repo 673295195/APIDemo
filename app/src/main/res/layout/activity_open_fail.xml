@@ -2,9 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
+              android:background="#D85940"
               android:gravity="center_vertical|center_horizontal"
               android:orientation="vertical"
-              android:background="#D85940"
     >
 
     <!-- 关闭按钮框 -->
@@ -15,12 +15,14 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         >
+
         <Button
             android:id="@+id/fail_close"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:background="@drawable/close"
-            android:layout_margin="10dp"/>
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_margin="2dp"
+            android:background="#D85940"
+            android:text="关闭"/>
 
     </RelativeLayout>
 
@@ -57,16 +59,15 @@
                 android:textSize="18sp"/>
 
             <TextView
-                android:textColor="@color/yellow"
-                android:gravity="center_horizontal"
-                android:layout_marginTop="30dp"
-                android:layout_below="@+id/name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_below="@+id/name"
+                android:layout_marginTop="30dp"
+                android:gravity="center_horizontal"
                 android:text="手慢了,红包派完了"
+                android:textColor="@color/yellow"
                 android:textSize="30dp"/>
         </RelativeLayout>
-
 
 
         <RelativeLayout

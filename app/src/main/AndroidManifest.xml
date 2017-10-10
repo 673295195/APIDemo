@@ -43,12 +43,12 @@
         <activity android:name=".ui.Main2Activity">
         </activity>
         <activity android:name=".ui.HongActivity"/>
-        <activity android:name=".OpenSuccess"/>
-        <activity android:name=".OpenFail">
+        <activity android:name=".view.OpenSuccess"/>
+        <activity android:name=".view.OpenFail">
         </activity>
-        <activity android:name=".MGCoinRecord">
+        <activity android:name=".view.MGCoinRecord">
         </activity>
-        <activity android:name=".LocationAndPacket"/>
+        <activity android:name=".view.LocationAndPacket"/>
 
     </application>
 

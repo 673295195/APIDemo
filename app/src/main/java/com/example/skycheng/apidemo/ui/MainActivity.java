@@ -29,9 +29,9 @@ import com.amap.api.maps2d.model.LatLng;
 import com.amap.api.maps2d.model.Marker;
 import com.amap.api.maps2d.model.MarkerOptions;
 import com.amap.api.maps2d.model.MyLocationStyle;
-import com.example.skycheng.apidemo.Constants;
-import com.example.skycheng.apidemo.LuckeyDialog;
-import com.example.skycheng.apidemo.OpenSuccess;
+import com.example.skycheng.apidemo.util.Constants;
+import com.example.skycheng.apidemo.view.LuckeyDialog;
+import com.example.skycheng.apidemo.view.OpenSuccess;
 import com.example.skycheng.apidemo.R;
 
 import java.util.ArrayList;

@@ -1,4 +1,4 @@
-package com.example.skycheng.apidemo;
+package com.example.skycheng.apidemo.view;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -8,12 +8,11 @@ import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Display;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.RadioGroup;
-import android.widget.SeekBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.amap.api.maps2d.AMap;
@@ -28,31 +27,25 @@ import com.amap.api.maps2d.model.LatLng;
 import com.amap.api.maps2d.model.Marker;
 import com.amap.api.maps2d.model.MarkerOptions;
 import com.amap.api.maps2d.model.MyLocationStyle;
-import com.example.skycheng.apidemo.ui.OkHttpUtil;
+import com.example.skycheng.apidemo.R;
+import com.example.skycheng.apidemo.bean.SellerBean;
+import com.example.skycheng.apidemo.util.Constants;
+import com.example.skycheng.apidemo.util.LogUtils;
+import com.example.skycheng.apidemo.util.OkHttpUtil;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Random;
 
 import static com.amap.api.mapcore.util.db.v;
 import static com.example.skycheng.apidemo.R.id.map;
 
 
-public class LocationAndPacket extends AppCompatActivity implements SeekBar.OnSeekBarChangeListener
-        , AMap.OnMyLocationChangeListener, RadioGroup.OnCheckedChangeListener, AMap.OnMarkerClickListener,
+public class LocationAndPacket extends AppCompatActivity implements AMap.OnMyLocationChangeListener,
+        RadioGroup.OnCheckedChangeListener, AMap.OnMarkerClickListener,
         AMap.OnMapClickListener, AMap.OnMapLongClickListener {
 
 
     private static final String TAG = "MainActivity";
-    private static final double EARTH_RADIUS = 6378137.0;
     private MapView mMapView;
-    private SeekBar mColorBar;
-    private SeekBar mAlphaBar;
-    private SeekBar mWidthBar;
-
-    private static final int WIDTH_MAX = 50;
-    private static final int HUE_MAX = 255;
-    private static final int ALPHA_MAX = 255;
     private AMap aMap;
     private Circle circle;
     private RadioGroup mGPSModeGroup;
@@ -60,21 +53,20 @@ public class LocationAndPacket extends AppCompatActivity implements SeekBar.OnSe
     private double mWEI;
     private double mJING;
     private Location mLocation;
-    private HashMap positionEneityList;
     private MarkerOptions markerOption;
     private LatLng latlng = new LatLng(mWEI, mJING);
     private Marker marker2;
-    private TextView markerText;
-    private Intent mContext;
     private final float R1 = (float) 200.0;
-    private SellerBean mSeller;
     private double mLat;
     private double mLon;
     private double mPacket;
     private LatLng mLatLng;
-    private OkHttpUtil mOkHttpUtil;
-    private String mString;
-    private SellerBean mSellerBean;
+    private OkHttpUtil mOkHttpUtil = new OkHttpUtil(this);
+    private ArrayList<SellerBean> mSellerBean;
+    private SellerBean mString;
+    private double mLat1;
+    private double mLon1;
+    private String mRedPacket;
 
 
     @Override
@@ -86,33 +78,27 @@ public class LocationAndPacket extends AppCompatActivity implements SeekBar.OnSe
         mMapView.onCreate(savedInstanceState);
         //初始化地图
         init();
-
-        // initIntent();
-
         //加入红包功能
-        addHongBao();
-
+        // addHongBao();
     }
 
-    //传过来的商家数据
-    private void initIntent() {
-        if (getIntent() != null) {
-            Intent intent = getIntent();
-            intent.getStringExtra("name");
-            intent.getStringExtra("ID");
-            mLat = intent.getDoubleExtra("lat", 22.948299);
-            mLon = intent.getDoubleExtra("lon", 113.891437);
-            // mLon = intent.getStringExtra("lon");
-            mPacket = intent.getDoubleExtra("Packet", 1.0);
-            // Bundle bundle = intent.getExtras();
-            //mSeller = (SellerBean) bundle.getSerializable("Seller");
-
-
-        }
-    }
 
     private void addHongBao() {
         //TODO for循环添加marker
+//
+        markerOption = new MarkerOptions();
+        for (int i = 0; i < mSellerBean.size(); i++) {
+            mLat1 = mSellerBean.get(i).getN_lat();
+            mLon1 = mSellerBean.get(i).getN_location();
+            String name = mSellerBean.get(i).getN_shops();
+            markerOption.position(new LatLng(mLat1, mLon1));
+            markerOption.title(name).snippet("剩余5个红包");
+
+            markerOption.draggable(true);
+            markerOption.icon(BitmapDescriptorFactory
+                    .fromResource(R.drawable.redred));
+            marker2 = aMap.addMarker(markerOption);
+        }
 
         //1北京
         //文字显示标注，可以设置显示内容，位置，字体大小颜色，背景色旋转角度,Z值等
@@ -128,7 +114,7 @@ public class LocationAndPacket extends AppCompatActivity implements SeekBar.OnSe
                 .position(Constants.CHENGDU).title("成都市")
                 .snippet("成都市:30.679879, 104.064855").draggable(true));*/
         //东莞
-        aMap.addMarker(new MarkerOptions().anchor(0.5f, 0.5f)
+       /* aMap.addMarker(new MarkerOptions().anchor(0.5f, 0.5f)
                 .position(new LatLng(22.9468146495, 113.8909184933)).title("东莞市")
                 .snippet("松山湖").draggable(true));
         // LatLng latLng=new LatLng(lat,lon);
@@ -198,7 +184,7 @@ public class LocationAndPacket extends AppCompatActivity implements SeekBar.OnSe
         markerOption.icon(BitmapDescriptorFactory
                 .fromResource(R.drawable.redred));
         marker2 = aMap.addMarker(markerOption);
-
+*/
 
         //添加地图上红包的点击事件
         aMap.setOnMarkerClickListener(this);
@@ -273,12 +259,13 @@ public class LocationAndPacket extends AppCompatActivity implements SeekBar.OnSe
         //设置SDK 自带定位消息监听
         aMap.setOnMyLocationChangeListener(this);
 
-        //loadNetData();
+        loadNetData();
     }
 
     //todo 加载商家bean数据
     private void loadNetData() {
-        //mOkHttpUtil.getSellerBean();
+        mOkHttpUtil.getSellerBean();
+
     }
 
     /**
@@ -336,30 +323,6 @@ public class LocationAndPacket extends AppCompatActivity implements SeekBar.OnSe
     /**
      * Circle中对填充颜色，透明度，画笔宽度设置响应事件
      */
-    @Override
-    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-        if (circle == null) {
-            return;
-        }
-        if (seekBar == mColorBar) {
-            circle.setFillColor(Color.argb(progress, 1, 1, 1));
-        } else if (seekBar == mAlphaBar) {
-            circle.setStrokeColor(Color.argb(progress, 1, 1, 1));
-        } else if (seekBar == mWidthBar) {
-            circle.setStrokeWidth(progress);
-        }
-        aMap.invalidate();// 刷新地图
-    }
-
-    @Override
-    public void onStartTrackingTouch(SeekBar seekBar) {
-
-    }
-
-    @Override
-    public void onStopTrackingTouch(SeekBar seekBar) {
-
-    }
 
     @Override
     public void onMyLocationChange(Location location) {  //位置改变是调用
@@ -369,6 +332,7 @@ public class LocationAndPacket extends AppCompatActivity implements SeekBar.OnSe
 
         // 定位回调监听
         if (location != null) {
+            Log.e(TAG, "onMyLocationChange: " + "onMyLocationChange 定位成功， lat: " + location.getLatitude() + " lon: " + location.getLongitude());
             LogUtils.log("amap", "onMyLocationChange 定位成功， lat: " + location.getLatitude() + " lon: " + location.getLongitude());
             Bundle bundle = location.getExtras();
             if (bundle != null) {
@@ -454,12 +418,36 @@ public class LocationAndPacket extends AppCompatActivity implements SeekBar.OnSe
 
             //弹出比例红包
             LuckeyDialog.Builder builder = new LuckeyDialog.Builder(LocationAndPacket.this, R.style.Dialog);//调用style中的Diaog
-            //设置商家名字
-            builder.setName("商家1");
 
+            for (int i = 0; i < mSellerBean.size(); i++) {
+                final int pid = mSellerBean.get(i).getId();
+                String n_shops = mSellerBean.get(i).getN_shops();
+                //设置商家名字
+                builder.setName(n_shops);
+                //商家头像
+                builder.setHeadImage(R.drawable.redred);
+
+                builder.setOpenButton("", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        //TODO  需要判断 红包是否领取成功,每个账号一天只能另一个
+                        //获取红包金额
+                        mOkHttpUtil.getPacketMoney(pid);
+
+                        Intent intent = new Intent(LocationAndPacket.this, OpenSuccess.class);
+                        //double redPacket = mString.getRedPacket();
+                     Log.e(TAG, "onClick: " + mRedPacket);
+//                    Bundle bundle = new Bundle();
+//                    bundle.putSerializable("Seller", mPacket);
+//                    intent.putExtras(bundle);
+                        intent.putExtra("money", mRedPacket + "");
+                        startActivity(intent);
+                        dialog.dismiss();
+                    }
+
+            /*//设置商家名字
+            builder.setName("商家1");
             //商家头像
             builder.setHeadImage(R.drawable.redred);
-
             builder.setOpenButton("", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
 
@@ -471,11 +459,11 @@ public class LocationAndPacket extends AppCompatActivity implements SeekBar.OnSe
 //                    Bundle bundle = new Bundle();
 //                    bundle.putSerializable("Seller", mPacket);
 //                    intent.putExtras(bundle);
-                    intent.putExtra("money", "11");
+                    intent.putExtra("money", "111");
                     startActivity(intent);
-                    dialog.dismiss();
-                }
-            });
+                    dialog.dismiss();*/
+                });
+            }
 
             builder.setCloseButton("", new DialogInterface.OnClickListener() {
                 @Override
@@ -533,15 +521,18 @@ public class LocationAndPacket extends AppCompatActivity implements SeekBar.OnSe
     }
 
     //网络获取的商家数据
-    public void setdata(SellerBean sellerBean) {
-
+    public void setData(ArrayList<SellerBean> sellerBean) {
         mSellerBean = sellerBean;
+        Log.e(TAG, "setData: " + mSellerBean.size());
+        addHongBao();
     }
 
-    //获取红包金额
-    public void getMoney(String string) {
 
-        mString = "string";
+    //获取红包金额
+    public void getMoney(SellerBean string) {
+        //mString = string;
+        Log.e(TAG, "getMoney: " + mString.getId());
+        mRedPacket = string.getN_amount();
     }
 }
 

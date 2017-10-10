@@ -9,8 +9,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.LinearLayout;
 
-import com.example.skycheng.apidemo.LuckeyDialog;
-import com.example.skycheng.apidemo.OpenSuccess;
+import com.example.skycheng.apidemo.view.LuckeyDialog;
+import com.example.skycheng.apidemo.view.OpenSuccess;
 import com.example.skycheng.apidemo.R;
 
 import static com.example.skycheng.apidemo.R.style.Dialog;

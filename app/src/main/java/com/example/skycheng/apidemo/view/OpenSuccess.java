@@ -1,4 +1,4 @@
-package com.example.skycheng.apidemo;
+package com.example.skycheng.apidemo.view;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,7 +9,9 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import com.example.skycheng.apidemo.ui.OkHttpUtil;
+import com.example.skycheng.apidemo.R;
+import com.example.skycheng.apidemo.bean.SellerBean;
+import com.example.skycheng.apidemo.util.OkHttpUtil;
 
 /**
  * Created by SkyCheng on 2017/9/25.
