@@ -28,6 +28,7 @@ public class OpenSuccess extends AppCompatActivity {
     //private double mADouble;
     private String mADouble;
     private OkHttpUtil mOkHttpUtil;
+    private String nameSeller;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -45,11 +46,13 @@ public class OpenSuccess extends AppCompatActivity {
 
     private void initData() {
         mMoney.setText(mADouble);
+        mName.setText(nameSeller);
     }
 
     private void initIntent() {
         if (getIntent() != null) {
             mADouble = getIntent().getStringExtra("money");
+            nameSeller = getIntent().getStringExtra("name");
         }
 /*            Bundle bundle = intent.getExtras();
             mADouble = bundle.getDouble("Seller");

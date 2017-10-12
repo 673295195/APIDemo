@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.annotation.IdRes;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -19,7 +20,6 @@ import com.amap.api.maps2d.AMap;
 import com.amap.api.maps2d.AMapUtils;
 import com.amap.api.maps2d.CameraUpdateFactory;
 import com.amap.api.maps2d.MapView;
-import com.amap.api.maps2d.model.BitmapDescriptor;
 import com.amap.api.maps2d.model.BitmapDescriptorFactory;
 import com.amap.api.maps2d.model.Circle;
 import com.amap.api.maps2d.model.CircleOptions;
@@ -28,14 +28,15 @@ import com.amap.api.maps2d.model.Marker;
 import com.amap.api.maps2d.model.MarkerOptions;
 import com.amap.api.maps2d.model.MyLocationStyle;
 import com.example.skycheng.apidemo.R;
+import com.example.skycheng.apidemo.bean.ReturnSellerPacket;
 import com.example.skycheng.apidemo.bean.SellerBean;
-import com.example.skycheng.apidemo.util.Constants;
 import com.example.skycheng.apidemo.util.LogUtils;
 import com.example.skycheng.apidemo.util.OkHttpUtil;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
-import static com.amap.api.mapcore.util.db.v;
 import static com.example.skycheng.apidemo.R.id.map;
 
 
@@ -59,14 +60,16 @@ public class LocationAndPacket extends AppCompatActivity implements AMap.OnMyLoc
     private final float R1 = (float) 200.0;
     private double mLat;
     private double mLon;
-    private double mPacket;
     private LatLng mLatLng;
     private OkHttpUtil mOkHttpUtil = new OkHttpUtil(this);
     private ArrayList<SellerBean> mSellerBean;
     private SellerBean mString;
     private double mLat1;
     private double mLon1;
+    private String mN_shops;
+    private HashMap<String, Integer> mHashMap;
     private String mRedPacket;
+    // private String mName;
 
 
     @Override
@@ -86,19 +89,26 @@ public class LocationAndPacket extends AppCompatActivity implements AMap.OnMyLoc
     private void addHongBao() {
         //TODO for循环添加marker
 //
+        mHashMap = new HashMap<>();
+        List<String> list=new ArrayList<>();
         markerOption = new MarkerOptions();
         for (int i = 0; i < mSellerBean.size(); i++) {
             mLat1 = mSellerBean.get(i).getN_lat();
             mLon1 = mSellerBean.get(i).getN_location();
             String name = mSellerBean.get(i).getN_shops();
+            Log.e(TAG, "显示=" + name);
+            mHashMap.put(name,i);
+            //list.add(i,name);
+            String n_envelope = mSellerBean.get(i).getN_envelope();
             markerOption.position(new LatLng(mLat1, mLon1));
-            markerOption.title(name).snippet("剩余5个红包");
+            markerOption.title(name).snippet("剩余" + n_envelope + "个红包");
 
             markerOption.draggable(true);
             markerOption.icon(BitmapDescriptorFactory
                     .fromResource(R.drawable.redred));
             marker2 = aMap.addMarker(markerOption);
         }
+        Log.e(TAG, "集合"+ mHashMap);
 
         //1北京
         //文字显示标注，可以设置显示内容，位置，字体大小颜色，背景色旋转角度,Z值等
@@ -209,7 +219,7 @@ public class LocationAndPacket extends AppCompatActivity implements AMap.OnMyLoc
 
         // 动画效果
         //4郑州
-        ArrayList<BitmapDescriptor> giflist = new ArrayList<BitmapDescriptor>();
+        /*ArrayList<BitmapDescriptor> giflist = new ArrayList<BitmapDescriptor>();
         giflist.add(BitmapDescriptorFactory
                 .defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
         giflist.add(BitmapDescriptorFactory
@@ -218,7 +228,7 @@ public class LocationAndPacket extends AppCompatActivity implements AMap.OnMyLoc
                 .defaultMarker(BitmapDescriptorFactory.HUE_YELLOW));
         aMap.addMarker(new MarkerOptions().anchor(0.5f, 0.5f)
                 .position(Constants.ZHENGZHOU).title("郑州市").icons(giflist)
-                .draggable(true).period(10));
+                .draggable(true).period(10));*/
 
         //drawMarkers();// 添加10个带有系统默认icon的marker
     }
@@ -253,8 +263,10 @@ public class LocationAndPacket extends AppCompatActivity implements AMap.OnMyLoc
             aMap = mMapView.getMap();
             setUpMap();
         }
-      /*  mGPSModeGroup = (RadioGroup) findViewById(R.id.gps_radio_group);
-        mGPSModeGroup.setOnCheckedChangeListener(this);*/
+        //circleAndLocation();
+        //模式切换
+        mGPSModeGroup = (RadioGroup) findViewById(R.id.gps_radio_group);
+        mGPSModeGroup.setOnCheckedChangeListener(this);
 
         //设置SDK 自带定位消息监听
         aMap.setOnMyLocationChangeListener(this);
@@ -281,6 +293,7 @@ public class LocationAndPacket extends AppCompatActivity implements AMap.OnMyLoc
         myLocationStyle.radiusFillColor(Color.argb(0, 0, 0, 0));// 设置圆形的填充颜色  。
         aMap.getUiSettings().setMyLocationButtonEnabled(true);// 设置默认定位按钮是否显示
         aMap.setMyLocationEnabled(true);// 设置为true表示显示定位层并可触发定位，false表示隐藏定位层并不可触发定位，默认是false
+
 
     }
 
@@ -327,6 +340,7 @@ public class LocationAndPacket extends AppCompatActivity implements AMap.OnMyLoc
     @Override
     public void onMyLocationChange(Location location) {  //位置改变是调用
         mLocation = location;
+        //long realtimeNanos = mLocation.getElapsedRealtimeNanos();
 
         LogUtils.log(TAG, "onMyLocationChange: wei:" + mWEI + "+++" + mJING);
 
@@ -350,11 +364,13 @@ public class LocationAndPacket extends AppCompatActivity implements AMap.OnMyLoc
                 mJING = mLocation.getLongitude();
                 mWEI = mLocation.getLatitude();
 
+
                 //限定周围范围
                 circleAndLocation();
-                //float v = mLocation.distanceTo(location);
 
-                LogUtils.log(TAG, "onMyLocationChange1: " + v);
+//                float v = mLocation.distanceTo(location);
+//
+//                Log.e(TAG, "onMyLocationChange1: " + v);
 
             } else {
                 LogUtils.log("amap", "定位信息， bundle is null ");
@@ -366,13 +382,14 @@ public class LocationAndPacket extends AppCompatActivity implements AMap.OnMyLoc
         }
     }
 
-    //
+    //圆圈范围
+    //// TODO: 2017/10/10 小问题
     private void circleAndLocation() {
         aMap.moveCamera(CameraUpdateFactory
                 .newLatLngZoom(new LatLng(mWEI, mJING), 17));// 设置指定的可视区域地图
         circle = aMap.addCircle(new CircleOptions().center(new LatLng(mWEI, mJING))
                 .radius(200).strokeColor(Color.RED)
-                .fillColor(Color.argb(50, 1, 1, 1)).strokeWidth(0));
+                .fillColor(Color.argb(10, 5, 5, 5)).strokeWidth(0));
 
     }
 
@@ -398,50 +415,69 @@ public class LocationAndPacket extends AppCompatActivity implements AMap.OnMyLoc
     }
 
     @Override
-    public boolean onMarkerClick(Marker marker) {   //marker点击事件
+    public boolean onMarkerClick(final Marker marker) {   //marker点击事件
 
         //计算2个经纬度之间的距离,精准度更高
-        double longitude = marker.getPosition().longitude;
-        double latitude = marker.getPosition().latitude;
+        LatLng position = marker.getPosition();
+        String title = marker.getTitle();
+        Log.e(TAG, "title="+title);
+    /*    String id = marker.getId();
+        final String substring = id.substring(6);
+        // Log.e(TAG, "id=: "+id);
+        final int j = Integer.valueOf(substring) - 1;
+        Log.e(TAG, "sub=: " + substring);*/
+        double longitude = position.longitude;
+        double latitude = position.latitude;
 
-        LatLng latlng2 = new LatLng(22.9471703230, 113.8910579681);
-        LatLng latlng3 = new LatLng(latitude, longitude);
-        LatLng latlng1 = new LatLng(mWEI, mJING);
+        // Log.e(TAG, "onMarkerClick: 纬度="+latitude+";经度="+longitude );
+
+        // LatLng latlng2 = new LatLng(22.9471703230, 113.8910579681);
 
         LogUtils.log("onMarkerClick: 定位" + mWEI + "==" + mJING);
-        float calculateLineDistance = AMapUtils.calculateLineDistance(latlng1, latlng3);
 
+        LatLng latlng3 = new LatLng(latitude, longitude);
+        LatLng latlng1 = new LatLng(mWEI, mJING);
+        float calculateLineDistance = AMapUtils.calculateLineDistance(latlng1, latlng3);
         LogUtils.log("2点距离marker:= " + calculateLineDistance + "米");
 
         //判断是否在范围内,在则弹出红包
-        if (calculateLineDistance <= R1 && calculateLineDistance > 0) {
-
+        // if (title.equals(name)) {
+        if (calculateLineDistance <= R1 && calculateLineDistance > 0 ) {
+            final int a = mHashMap.get(title);
+            Log.e(TAG, "点击的位置="+mHashMap.get(title) );
+            // final int a = mHashMap.get(title);
             //弹出比例红包
             LuckeyDialog.Builder builder = new LuckeyDialog.Builder(LocationAndPacket.this, R.style.Dialog);//调用style中的Diaog
 
-            for (int i = 0; i < mSellerBean.size(); i++) {
-                final int pid = mSellerBean.get(i).getId();
-                String n_shops = mSellerBean.get(i).getN_shops();
+
+                final String n_shops = mSellerBean.get(a).getN_shops();
                 //设置商家名字
                 builder.setName(n_shops);
                 //商家头像
-                builder.setHeadImage(R.drawable.redred);
+                builder.setHeadImage(R.drawable.seller);
+
 
                 builder.setOpenButton("", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         //TODO  需要判断 红包是否领取成功,每个账号一天只能另一个
                         //获取红包金额
-                        mOkHttpUtil.getPacketMoney(pid);
+                        mOkHttpUtil.getPacketMoney(mSellerBean.get(a).getId());
+                        SystemClock.sleep(300);
 
-                        Intent intent = new Intent(LocationAndPacket.this, OpenSuccess.class);
-                        //double redPacket = mString.getRedPacket();
-                     Log.e(TAG, "onClick: " + mRedPacket);
-//                    Bundle bundle = new Bundle();
-//                    bundle.putSerializable("Seller", mPacket);
-//                    intent.putExtras(bundle);
-                        intent.putExtra("money", mRedPacket + "");
-                        startActivity(intent);
-                        dialog.dismiss();
+                        if (mSellerBean.get(a).getN_redstate().equals("0")) {  //现金红包
+                            Intent intent = new Intent(LocationAndPacket.this, OpenSuccess.class);
+                            //double redPacket = mString.getRedPacket();
+                            Log.e(TAG, "钱: " + mRedPacket);
+                            intent.putExtra("money", mRedPacket);
+                            intent.putExtra("name", n_shops);
+                            startActivity(intent);
+                            dialog.dismiss();
+                            marker.destroy();
+                        } else if (mSellerBean.get(a).getN_redstate().equals("1")) {  //优惠券
+                            Log.e(TAG, "是" + "优惠券");
+                        } else {  //活动碎片
+                            Log.e(TAG, "是" + "活动碎片");
+                        }
                     }
 
             /*//设置商家名字
@@ -463,29 +499,29 @@ public class LocationAndPacket extends AppCompatActivity implements AMap.OnMyLoc
                     startActivity(intent);
                     dialog.dismiss();*/
                 });
-            }
-
-            builder.setCloseButton("", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int i) {
-                    dialog.dismiss();
-                }
-            });
-            Dialog dialog = builder.create();
-            Window dialogWindow = dialog.getWindow();
 
 
-            WindowManager m = getWindowManager();
-            Display d = m.getDefaultDisplay(); // 获取屏幕宽、高用
-            WindowManager.LayoutParams p = dialogWindow.getAttributes(); // 获取对话框当前的参数值
-            p.height = (int) (d.getHeight() * 0.7); // 高度设置为屏幕的0.6
-            p.width = (int) (d.getWidth() * 0.75); // 宽度设置为屏幕的0.65
-            dialogWindow.setAttributes(p);
-            dialog.show();
+                builder.setCloseButton("", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int i) {
+                        dialog.dismiss();
+                    }
+                });
+                Dialog dialog = builder.create();
+                Window dialogWindow = dialog.getWindow();
 
-            //true表示消费该事件,可以点击
-            //TODO
-            return true;
+
+                WindowManager m = getWindowManager();
+                Display d = m.getDefaultDisplay(); // 获取屏幕宽、高用
+                WindowManager.LayoutParams p = dialogWindow.getAttributes(); // 获取对话框当前的参数值
+                p.height = (int) (d.getHeight() * 0.7); // 高度设置为屏幕的0.6
+                p.width = (int) (d.getWidth() * 0.75); // 宽度设置为屏幕的0.65
+                dialogWindow.setAttributes(p);
+                dialog.show();
+
+                //true表示消费该事件,可以点击
+                //TODO
+              return true;
             //表示超出范围200米
         } else if (calculateLineDistance > 200) {
             Toast.makeText(this, "距离商家太远,请靠近试试", Toast.LENGTH_SHORT).show();
@@ -494,7 +530,9 @@ public class LocationAndPacket extends AppCompatActivity implements AMap.OnMyLoc
         } else {
             return false;
         }
+        // }
 
+        // }
     }
 
     //TODO 点击地图,显示点击坐标
@@ -508,8 +546,6 @@ public class LocationAndPacket extends AppCompatActivity implements AMap.OnMyLoc
         LogUtils.log("onMapClick: 点击坐标" + latitude + "==" + longitude);
 
         LatLng latlng1 = new LatLng(mWEI, mJING);
-
-
         float calculateLineDistance = AMapUtils.calculateLineDistance(latlng1, mLatLng);
 
         LogUtils.log("2个marker间距离=" + calculateLineDistance + "米");
@@ -529,10 +565,10 @@ public class LocationAndPacket extends AppCompatActivity implements AMap.OnMyLoc
 
 
     //获取红包金额
-    public void getMoney(SellerBean string) {
-        //mString = string;
-        Log.e(TAG, "getMoney: " + mString.getId());
-        mRedPacket = string.getN_amount();
+    public void getMoney(ReturnSellerPacket string) {
+        mRedPacket = string.getCa_amount();
+        Log.e(TAG, "红包数额: " + mRedPacket);
+
     }
 }
 

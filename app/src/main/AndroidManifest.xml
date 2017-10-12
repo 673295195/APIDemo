@@ -29,7 +29,7 @@
             android:name="com.amap.api.v2.apikey"
             android:value="b63e9a1608ab8fc99b086fd04927b97d"/>
 
-        <activity android:name=".ui.TwoButton">
+        <activity android:name=".view.LocationAndPacket">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
@@ -48,7 +48,7 @@
         </activity>
         <activity android:name=".view.MGCoinRecord">
         </activity>
-        <activity android:name=".view.LocationAndPacket"/>
+        <activity android:name=".ui.TwoButton"/>
 
     </application>
 

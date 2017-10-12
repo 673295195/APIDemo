@@ -5,6 +5,7 @@ import android.widget.Toast;
 
 import com.example.skycheng.apidemo.bean.BuyerBean;
 import com.example.skycheng.apidemo.bean.SellerBean;
+import com.example.skycheng.apidemo.bean.ReturnSellerPacket;
 import com.example.skycheng.apidemo.view.LocationAndPacket;
 import com.example.skycheng.apidemo.view.MGCoinRecord;
 import com.google.gson.Gson;
@@ -40,22 +41,28 @@ public class OkHttpUtil {
     public void getSellerBean() {
         //http://localhost:8080/versionupdate.json
         //获取所有商家信息地址
-        String url = "http://192.168.15.16:8080/lbsbonustext/database.action";
+        String url = "http://192.168.23.1:8080/lbsbonustext/shopm.action";
         mOkHttpClient = new OkHttpClient();
         //url可能不同
         Request mRequest = new Request.Builder().url(url).build();
         mOkHttpClient.newCall(mRequest).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                Toast.makeText(mLocationAndPacket, "服务器繁忙", Toast.LENGTH_SHORT).show();
-                Log.e(TAG, "onResponse1: " + e.getMessage());
+                mLocationAndPacket.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(mLocationAndPacket, "服务器繁忙", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+                Log.e(TAG, "1次请求服务器异常: " + e.getMessage());
             }
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 String string = response.body().string();
 
-                Log.e(TAG, "onResponse: " + string);
+                Log.e(TAG, "获得所以商家数据" + string);
                 // Toast.makeText(locationAndPacket, "请求成功", Toast.LENGTH_SHORT).show();
                 Gson gson = new Gson();
 
@@ -63,39 +70,46 @@ public class OkHttpUtil {
                 Type type = new TypeToken<List<SellerBean>>() {
                 }.getType();
                 list = gson.fromJson(string, type);
-                Log.e(TAG, "onResponse: " + list.size());
+                Log.e(TAG, "商家个数 " + list.size());
                 mLocationAndPacket.setData(list);
             }
         });
     }
 
-    public void getPacketMoney(final int pid) {
+    public void getPacketMoney(int pid) {
 
        //发送商家和消费者ID,获取红包
-        String url = "http://192.168.15.16:8080/lbsbonustext/redhbaoqq.action?pid="+pid+"&vid=3";
+        String url = "http://192.168.23.1:8080/lbsbonustext/redhbaoqq.action?pid="+pid+"&vid=3";
         mOkHttpClient = new OkHttpClient();
         //url可能不同
         Request mRequest = new Request.Builder().url(url).build();
-        Log.e(TAG, "getPacketMoney: " + mRequest);
+        Log.e(TAG, "返回的请求头: " + mRequest);
         mOkHttpClient.newCall(mRequest).enqueue(new Callback() {
 
             @Override
             public void onFailure(Call call, IOException e) {
-                Toast.makeText(mLocationAndPacket, "服务器繁忙", Toast.LENGTH_SHORT).show();
-                Log.e(TAG, "onResponse12: " + e.getMessage());
+                mLocationAndPacket.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(mLocationAndPacket, "服务器繁忙", Toast.LENGTH_SHORT).show();
+                    }
+                });
+                Log.e(TAG, "2次请求异常: " + e.getMessage());
             }
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 String string = response.body().string();
-                Log.e(TAG, "onResponse:get " + string);
+                Log.e(TAG, "返回商家数据 " + string);
                 Gson gson = new Gson();
-                ArrayList<SellerBean> list = new ArrayList<SellerBean>();
-                Type type = new TypeToken<List<SellerBean>>() {
+
+
+                ArrayList<ReturnSellerPacket> list = new ArrayList<ReturnSellerPacket>();
+                Type type = new TypeToken<List<ReturnSellerPacket>>() {
                 }.getType();
                 list = gson.fromJson(string, type);
-                mLocationAndPacket.getMoney(list.get(0));
-            }
+                Log.e(TAG, "现金为"+list.get(0).getCa_amount());
+                mLocationAndPacket.getMoney(list.get(0));}
         });
     }
 
@@ -105,7 +119,13 @@ public class OkHttpUtil {
         mOkHttpClient.newCall(mRequest).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                //oast.makeText(locationAndPacket, "服务器繁忙", Toast.LENGTH_SHORT).show();
+                mLocationAndPacket.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(mLocationAndPacket, "服务器繁忙", Toast.LENGTH_SHORT).show();
+                    }
+                });
+               // Toast.makeText(mLocationAndPacket, "服务器繁忙", Toast.LENGTH_SHORT).show();
 
             }
 
