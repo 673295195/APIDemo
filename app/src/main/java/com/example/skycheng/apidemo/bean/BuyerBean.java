@@ -17,6 +17,26 @@ public class BuyerBean {
     private String v_status;//会员状态
     private String v_documents;//证件
 
+    public String getV_Emails() {
+        return v_Emails;
+    }
+
+    public void setV_Emails(String v_Emails) {
+        this.v_Emails = v_Emails;
+    }
+
+    private String v_Emails;//电子邮箱
+
+    public String getV_headImage() {
+        return v_headImage;
+    }
+
+    public void setV_headImage(String v_headImage) {
+        this.v_headImage = v_headImage;
+    }
+
+    private String v_headImage;//会员头像
+
     public int getId() {
         return id;
     }

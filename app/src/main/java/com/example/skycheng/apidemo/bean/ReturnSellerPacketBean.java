@@ -4,17 +4,16 @@ package com.example.skycheng.apidemo.bean;
  * Created by SkyCheng on 2017/10/11.
  */
 
-public class ReturnSellerPacket {
+public class ReturnSellerPacketBean {
     private int id;
-    private String ca_nname;//鍟嗗鍚嶇О
-    private String ca_cashcol;//浼氬憳鍚嶇О
-    private String ca_amount;//閲戦
-    private String ca_time;//鏃ユ湡
-    private String ca_year;//骞�
-    private String ca_months;//鏈�
-    private String ca_dname;//鐢ㄦ潵鍌ㄥ瓨鐢ㄦ埛鍙戠孩鍖�
+    private String ca_nname;//商家名称
+    private String ca_amount;//金额
+    private String ca_time;//时间
+    private String ca_year;//年份
+    private String ca_months;//月份
+    private String ca_dname;//会员名字
+    private String ca_switchstate;//红包领取状态
 
-    private String ca_switchstate;//绾㈠寘鐘舵�0鏈紑 1鎵撳紑
 
     public int getId() {
         return id;
@@ -32,13 +31,6 @@ public class ReturnSellerPacket {
         this.ca_nname = ca_nname;
     }
 
-    public String getCa_cashcol() {
-        return ca_cashcol;
-    }
-
-    public void setCa_cashcol(String ca_cashcol) {
-        this.ca_cashcol = ca_cashcol;
-    }
 
     public String getCa_amount() {
         return ca_amount;

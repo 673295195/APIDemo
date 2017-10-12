@@ -28,14 +28,14 @@ import com.amap.api.maps2d.model.Marker;
 import com.amap.api.maps2d.model.MarkerOptions;
 import com.amap.api.maps2d.model.MyLocationStyle;
 import com.example.skycheng.apidemo.R;
-import com.example.skycheng.apidemo.bean.ReturnSellerPacket;
+import com.example.skycheng.apidemo.bean.BuyerBean;
+import com.example.skycheng.apidemo.bean.ReturnSellerPacketBean;
 import com.example.skycheng.apidemo.bean.SellerBean;
 import com.example.skycheng.apidemo.util.LogUtils;
 import com.example.skycheng.apidemo.util.OkHttpUtil;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 import static com.example.skycheng.apidemo.R.id.map;
 
@@ -90,14 +90,13 @@ public class LocationAndPacket extends AppCompatActivity implements AMap.OnMyLoc
         //TODO for循环添加marker
 //
         mHashMap = new HashMap<>();
-        List<String> list=new ArrayList<>();
         markerOption = new MarkerOptions();
         for (int i = 0; i < mSellerBean.size(); i++) {
             mLat1 = mSellerBean.get(i).getN_lat();
             mLon1 = mSellerBean.get(i).getN_location();
             String name = mSellerBean.get(i).getN_shops();
-            Log.e(TAG, "显示=" + name);
-            mHashMap.put(name,i);
+            // Log.e(TAG, "显示=" + name);
+            mHashMap.put(name, i);
             //list.add(i,name);
             String n_envelope = mSellerBean.get(i).getN_envelope();
             markerOption.position(new LatLng(mLat1, mLon1));
@@ -108,7 +107,7 @@ public class LocationAndPacket extends AppCompatActivity implements AMap.OnMyLoc
                     .fromResource(R.drawable.redred));
             marker2 = aMap.addMarker(markerOption);
         }
-        Log.e(TAG, "集合"+ mHashMap);
+        Log.e(TAG, "集合" + mHashMap);
 
         //1北京
         //文字显示标注，可以设置显示内容，位置，字体大小颜色，背景色旋转角度,Z值等
@@ -277,6 +276,7 @@ public class LocationAndPacket extends AppCompatActivity implements AMap.OnMyLoc
     //todo 加载商家bean数据
     private void loadNetData() {
         mOkHttpUtil.getSellerBean();
+        mOkHttpUtil.getBuyerBean();
 
     }
 
@@ -420,7 +420,7 @@ public class LocationAndPacket extends AppCompatActivity implements AMap.OnMyLoc
         //计算2个经纬度之间的距离,精准度更高
         LatLng position = marker.getPosition();
         String title = marker.getTitle();
-        Log.e(TAG, "title="+title);
+        Log.e(TAG, "title=" + title);
     /*    String id = marker.getId();
         final String substring = id.substring(6);
         // Log.e(TAG, "id=: "+id);
@@ -442,28 +442,31 @@ public class LocationAndPacket extends AppCompatActivity implements AMap.OnMyLoc
 
         //判断是否在范围内,在则弹出红包
         // if (title.equals(name)) {
-        if (calculateLineDistance <= R1 && calculateLineDistance > 0 ) {
+        if (calculateLineDistance <= R1 && calculateLineDistance > 0) {
             final int a = mHashMap.get(title);
-            Log.e(TAG, "点击的位置="+mHashMap.get(title) );
+            Log.e(TAG, "点击的位置=" + mHashMap.get(title));
             // final int a = mHashMap.get(title);
             //弹出比例红包
             LuckeyDialog.Builder builder = new LuckeyDialog.Builder(LocationAndPacket.this, R.style.Dialog);//调用style中的Diaog
 
 
-                final String n_shops = mSellerBean.get(a).getN_shops();
-                //设置商家名字
-                builder.setName(n_shops);
-                //商家头像
-                builder.setHeadImage(R.drawable.seller);
+            final String n_shops = mSellerBean.get(a).getN_shops();
+            //设置商家名字
+            builder.setName(n_shops);
+            //商家头像
+            builder.setHeadImage(R.drawable.seller);
 
 
-                builder.setOpenButton("", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        //TODO  需要判断 红包是否领取成功,每个账号一天只能另一个
-                        //获取红包金额
-                        mOkHttpUtil.getPacketMoney(mSellerBean.get(a).getId());
-                        SystemClock.sleep(300);
+            builder.setOpenButton("", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    //TODO  需要判断 红包是否领取成功,每个账号一天只能另一个
+                    //获取红包金额
 
+                    mOkHttpUtil.getPacketMoney(mSellerBean.get(a).getId());
+
+                    //synchronized (this){
+
+                    if (mRedPacket != null) {
                         if (mSellerBean.get(a).getN_redstate().equals("0")) {  //现金红包
                             Intent intent = new Intent(LocationAndPacket.this, OpenSuccess.class);
                             //double redPacket = mString.getRedPacket();
@@ -478,7 +481,24 @@ public class LocationAndPacket extends AppCompatActivity implements AMap.OnMyLoc
                         } else {  //活动碎片
                             Log.e(TAG, "是" + "活动碎片");
                         }
+                    }else {
+                        SystemClock.sleep(500);
+                        if (mSellerBean.get(a).getN_redstate().equals("0")) {  //现金红包
+                        Intent intent = new Intent(LocationAndPacket.this, OpenSuccess.class);
+                        //double redPacket = mString.getRedPacket();
+                        Log.e(TAG, "钱: " + mRedPacket);
+                        intent.putExtra("money", mRedPacket);
+                        intent.putExtra("name", n_shops);
+                        startActivity(intent);
+                        dialog.dismiss();
+                        marker.destroy();
+                    } else if (mSellerBean.get(a).getN_redstate().equals("1")) {  //优惠券
+                        Log.e(TAG, "是" + "优惠券");
+                    } else {  //活动碎片
+                        Log.e(TAG, "是" + "活动碎片");
                     }
+                    }
+                }
 
             /*//设置商家名字
             builder.setName("商家1");
@@ -498,30 +518,30 @@ public class LocationAndPacket extends AppCompatActivity implements AMap.OnMyLoc
                     intent.putExtra("money", "111");
                     startActivity(intent);
                     dialog.dismiss();*/
-                });
+            });
 
 
-                builder.setCloseButton("", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int i) {
-                        dialog.dismiss();
-                    }
-                });
-                Dialog dialog = builder.create();
-                Window dialogWindow = dialog.getWindow();
+            builder.setCloseButton("", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int i) {
+                    dialog.dismiss();
+                }
+            });
+            Dialog dialog = builder.create();
+            Window dialogWindow = dialog.getWindow();
 
 
-                WindowManager m = getWindowManager();
-                Display d = m.getDefaultDisplay(); // 获取屏幕宽、高用
-                WindowManager.LayoutParams p = dialogWindow.getAttributes(); // 获取对话框当前的参数值
-                p.height = (int) (d.getHeight() * 0.7); // 高度设置为屏幕的0.6
-                p.width = (int) (d.getWidth() * 0.75); // 宽度设置为屏幕的0.65
-                dialogWindow.setAttributes(p);
-                dialog.show();
+            WindowManager m = getWindowManager();
+            Display d = m.getDefaultDisplay(); // 获取屏幕宽、高用
+            WindowManager.LayoutParams p = dialogWindow.getAttributes(); // 获取对话框当前的参数值
+            p.height = (int) (d.getHeight() * 0.7); // 高度设置为屏幕的0.6
+            p.width = (int) (d.getWidth() * 0.75); // 宽度设置为屏幕的0.65
+            dialogWindow.setAttributes(p);
+            dialog.show();
 
-                //true表示消费该事件,可以点击
-                //TODO
-              return true;
+            //true表示消费该事件,可以点击
+            //TODO
+            return true;
             //表示超出范围200米
         } else if (calculateLineDistance > 200) {
             Toast.makeText(this, "距离商家太远,请靠近试试", Toast.LENGTH_SHORT).show();
@@ -565,9 +585,13 @@ public class LocationAndPacket extends AppCompatActivity implements AMap.OnMyLoc
 
 
     //获取红包金额
-    public void getMoney(ReturnSellerPacket string) {
+    public void getMoney(ReturnSellerPacketBean string) {
         mRedPacket = string.getCa_amount();
         Log.e(TAG, "红包数额: " + mRedPacket);
+
+    }
+
+    public void setBuyerData(ArrayList<BuyerBean> list) {
 
     }
 }
