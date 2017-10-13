@@ -49,7 +49,10 @@
         <activity android:name=".view.MGCoinRecord">
         </activity>
         <activity android:name=".ui.TwoButton"/>
-
+        <activity android:name=".view.OpenCouponSuccess">
+        </activity>
+        <activity android:name=".OpenFragmentSuccess">
+        </activity>
     </application>
 
 </manifest>

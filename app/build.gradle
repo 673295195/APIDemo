@@ -5,7 +5,7 @@ android {
     buildToolsVersion "26.0.1"
     defaultConfig {
         applicationId "com.example.skycheng.apidemo"
-        minSdkVersion 16
+        minSdkVersion 21
         targetSdkVersion 25
         versionCode 1
         versionName "1.0"
@@ -27,7 +27,14 @@ dependencies {
     //3D地图so及jar
     //定位功能
     //搜索功能
+
+
     compile 'com.amap.api:3dmap:latest.integration'
+    //优惠券
+
+    compile 'com.jakewharton:butterknife:8.6.0'
+
+    compile 'com.jakewharton:butterknife-compiler:8.6.0'
     compile 'com.amap.api:3dmap:latest.integration'
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
@@ -35,11 +42,10 @@ dependencies {
     compile 'com.jakewharton:butterknife:8.6.0'
     compile 'com.amap.api:location:latest.integration'
     compile 'com.amap.api:search:latest.integration'
-    testCompile 'junit:junit:4.12'
-    annotationProcessor 'com.jakewharton:butterknife-compiler:8.6.0'
     compile 'com.github.markushi:circlebutton:1.1'
-
     compile 'com.squareup.retrofit2:retrofit:2.1.0'
     compile 'com.squareup.retrofit2:converter-gson:2.1.0'
     compile 'com.squareup.okhttp3:okhttp:3.9.0'
+    compile 'com.orzangleli.coupon:coupon:1.0.1'
+    testCompile 'junit:junit:4.12'
 }

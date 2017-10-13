@@ -4,14 +4,18 @@ package com.example.skycheng.apidemo.bean;
  * Created by SkyCheng on 2017/10/12.
  */
 
-public class RedPacketFragmentBean {
+public class PacketFragmentBean {
 
 
     private int id;
-    private int vi_nname;//商铺名称
-    private int vi_vname;//vip名称
+    private String vi_nname;//商铺名称
+    private String vi_vname;//vip名称
     private String vi_time;//日期
-    private int vi_switchstate;//状态
+    private String vi_year;//年
+    private String vi_months;//月
+    private String vi_chipcol;//碎片
+
+    private String vi_switchstate;//状态
 
     public int getId() {
         return id;
@@ -21,19 +25,19 @@ public class RedPacketFragmentBean {
         this.id = id;
     }
 
-    public int getVi_nname() {
+    public String getVi_nname() {
         return vi_nname;
     }
 
-    public void setVi_nname(int vi_nname) {
+    public void setVi_nname(String vi_nname) {
         this.vi_nname = vi_nname;
     }
 
-    public int getVi_vname() {
+    public String getVi_vname() {
         return vi_vname;
     }
 
-    public void setVi_vname(int vi_vname) {
+    public void setVi_vname(String vi_vname) {
         this.vi_vname = vi_vname;
     }
 
@@ -43,14 +47,6 @@ public class RedPacketFragmentBean {
 
     public void setVi_time(String vi_time) {
         this.vi_time = vi_time;
-    }
-
-    public int getVi_switchstate() {
-        return vi_switchstate;
-    }
-
-    public void setVi_switchstate(int vi_switchstate) {
-        this.vi_switchstate = vi_switchstate;
     }
 
     public String getVi_year() {
@@ -77,9 +73,11 @@ public class RedPacketFragmentBean {
         this.vi_chipcol = vi_chipcol;
     }
 
-    private String vi_year;//年
-    private String vi_months;//月
-    private String vi_chipcol;//碎片
-//
-//
- }
+    public String getVi_switchstate() {
+        return vi_switchstate;
+    }
+
+    public void setVi_switchstate(String vi_switchstate) {
+        this.vi_switchstate = vi_switchstate;
+    }
+}

@@ -6,11 +6,13 @@ package com.example.skycheng.apidemo.bean;
 
 public class CouponBean {
     private int id;
-    private int p_nname;//商铺名称
-    private int p_vname;//vip名称
+    private String p_nname;//商铺名称
+    private String p_vname;//vip名称
     private String p_amount;//优惠券
     private String p_time;//日期
-    private int p_switchstate;//状态
+    private String p_switchstate;//状态
+    private String p_months;//月
+
     private String p_year;//年
 
     public int getId() {
@@ -21,19 +23,19 @@ public class CouponBean {
         this.id = id;
     }
 
-    public int getP_nname() {
+    public String getP_nname() {
         return p_nname;
     }
 
-    public void setP_nname(int p_nname) {
+    public void setP_nname(String p_nname) {
         this.p_nname = p_nname;
     }
 
-    public int getP_vname() {
+    public String getP_vname() {
         return p_vname;
     }
 
-    public void setP_vname(int p_vname) {
+    public void setP_vname(String p_vname) {
         this.p_vname = p_vname;
     }
 
@@ -53,20 +55,12 @@ public class CouponBean {
         this.p_time = p_time;
     }
 
-    public int getP_switchstate() {
+    public String getP_switchstate() {
         return p_switchstate;
     }
 
-    public void setP_switchstate(int p_switchstate) {
+    public void setP_switchstate(String p_switchstate) {
         this.p_switchstate = p_switchstate;
-    }
-
-    public String getP_year() {
-        return p_year;
-    }
-
-    public void setP_year(String p_year) {
-        this.p_year = p_year;
     }
 
     public String getP_months() {
@@ -77,5 +71,11 @@ public class CouponBean {
         this.p_months = p_months;
     }
 
-    private String p_months;//月
+    public String getP_year() {
+        return p_year;
+    }
+
+    public void setP_year(String p_year) {
+        this.p_year = p_year;
+    }
 }

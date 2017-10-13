@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:coupon="http://schemas.android.com/apk/res-auto"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:gravity="center_vertical|center_horizontal"
+              android:orientation="vertical"
+    >
+
+    <!-- 关闭按钮框 -->
+    <RelativeLayout
+        android:id="@+id/top"
+        android:layout_width="match_parent"
+
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="#D85940"
+        >
+
+        <Button
+            android:onClick="close"
+            android:id="@+id/close"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_margin="2dp"
+            android:background="#D85940"
+            android:text="关闭"
+            android:textColor="@color/yellow"/>
+
+        <TextView
+            android:gravity="center"
+            android:layout_centerHorizontal="true"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="红包详情"
+            android:textColor="@color/yellow"
+            android:textSize="20dp"
+            />
+
+    </RelativeLayout>
+
+    <!-- 头像以及相关文字 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_below="@+id/top"
+        android:layout_weight="10"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="3">
+
+            <ImageButton
+                android:id="@+id/head_img"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:background="@drawable/ic_launcher"/>
+
+            <TextView
+                android:id="@+id/name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/head_img"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="10dp"
+                android:text="系统用户"
+                android:textColor="#383A38"
+                android:textSize="18sp"/>
+
+            <TextView
+                android:id="@+id/textView1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/name"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="5dp"
+                android:text="赠送你一张优惠券"
+                android:textColor="#383A38"
+                android:textSize="15sp"/>
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/textView1"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="20dp"
+                android:text="恭喜发财，大吉大利"
+                android:textColor="#383A38"
+                android:textSize="23sp"/>
+
+        </RelativeLayout>
+
+        <com.orzangleli.coupon.view.CouponView
+            android:layout_width="match_parent"
+            android:id="@+id/money"
+            android:layout_height="0dp"
+            android:layout_weight="2"
+            android:orientation="vertical"
+            android:background="#FF9933"
+            coupon:gap="4dp"
+            coupon:radius="5dp"
+            coupon:radiusBackgroundColor="#ffffff"
+            coupon:showHorizontal="true"
+            coupon:showVertical="true"
+            android:layout_marginTop="10dp"
+            >
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:text="优惠券"
+                android:textSize="24sp"
+                android:textColor="#FFFFFF"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="15dp"
+                android:gravity="center_vertical"
+                />
+
+            <TextView
+                android:id="@+id/coupon"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="10元"
+                android:textSize="28sp"
+                android:textColor="#FFFFFF"
+                android:layout_marginTop="3dp"
+                android:layout_marginLeft="25dp"
+                android:gravity="center_vertical"
+                />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="使用期限：一周内"
+                android:textSize="18sp"
+                android:textColor="#FFFFFF"
+                android:layout_marginTop="3dp"
+                android:layout_marginLeft="25dp"
+                android:layout_marginBottom="15dp"
+                android:gravity="center_vertical"
+                />
+
+        </com.orzangleli.coupon.view.CouponView>
+        <!--<LinearLayout-->
+            <!--android:orientation="horizontal"-->
+            <!--android:background="@drawable/btn_coupon"-->
+            <!--android:id="@+id/money"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="0dp"-->
+            <!--android:layout_weight="2"-->
+            <!--&gt;-->
+
+                <!--<TextView-->
+                    <!--android:layout_margin="10dp"-->
+                    <!--android:textStyle="bold"-->
+                    <!--android:textSize="22dp"-->
+                    <!--android:text="$"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="match_parent"/>-->
+
+
+            <!--<TextView-->
+                <!--android:id="@+id/coupon"-->
+                <!--android:layout_marginTop="22dp"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:text="10.0优惠券"-->
+                <!--android:textSize="30dp"-->
+                <!--android:textStyle="bold"/>-->
+        <!--</LinearLayout>-->
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="3">
+            <TextView
+                android:layout_marginTop="10dp"
+                android:textColor="#0000ff"
+                android:id="@+id/search"
+                android:gravity="center_horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="查看我的优惠券"/>
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="14dp"/>
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

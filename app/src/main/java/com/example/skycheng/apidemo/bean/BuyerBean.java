@@ -5,37 +5,22 @@ package com.example.skycheng.apidemo.bean;
  */
 
 public class BuyerBean {
-    private int id;//会员的编号
-    private String v_name; //会员姓名
-    private String v_sex; //会员性别
-    private String vl_id; //会员等级
-    private String v_phone; //会员电话
-    private String v_birthday;//会员生日
-    private String v_address;//家庭住址
+    private int id;//会员id
+    private String v_name;//会员名称
+    private String v_sex;//性别
+    private String vl_id;//会员等级
+    private String v_phone;//联系电话
+    private String v_birthday;//生日
+    private String v_address;//地址
     private String v_company;//公司
-    private String v_score;//会员积分
-    private String v_status;//会员状态
-    private String v_documents;//证件
-
-    public String getV_Emails() {
-        return v_Emails;
-    }
-
-    public void setV_Emails(String v_Emails) {
-        this.v_Emails = v_Emails;
-    }
-
-    private String v_Emails;//电子邮箱
-
-    public String getV_headImage() {
-        return v_headImage;
-    }
-
-    public void setV_headImage(String v_headImage) {
-        this.v_headImage = v_headImage;
-    }
-
-    private String v_headImage;//会员头像
+    private String v_score;//积分
+    private String v_status;//状态
+    private String v_documents;//证件号
+    private String v_balance;//余额
+    private String v_Email;//电子邮箱
+    private String  v_registrationtime;//注册时间
+    private String v_lasttime;//上次上线
+    private String v_amount;//会员头像
 
     public int getId() {
         return id;
@@ -164,10 +149,4 @@ public class BuyerBean {
     public void setV_amount(String v_amount) {
         this.v_amount = v_amount;
     }
-
-    private String v_balance;//余额
-    private String v_Email;//电子邮件
-    private String v_registrationtime;//注册时间
-    private String v_lasttime;//上次上线时间
-    private String v_amount;//会员头像
 }

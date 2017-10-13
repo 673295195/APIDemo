@@ -6,11 +6,13 @@ import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.example.skycheng.apidemo.R;
+import com.example.skycheng.apidemo.util.MyYAnimation;
 
 /**
  * Created by SkyCheng on 2017/9/25.
@@ -19,8 +21,12 @@ import com.example.skycheng.apidemo.R;
 
 public class LuckeyDialog extends Dialog {
 
+    private Context mContext;
+
+
     public LuckeyDialog(Context context) {
         super(context);
+        mContext = context;
     }
 
     public LuckeyDialog(Context context, int theme) {
@@ -31,7 +37,7 @@ public class LuckeyDialog extends Dialog {
         private Context context;
         private String name;//发红包者的名称
 
-        private Button red_page;
+        public Button red_page;
 
         //拆红包按钮
         private String openButtonText;
@@ -44,6 +50,7 @@ public class LuckeyDialog extends Dialog {
         private int mBao;
         private int mImageHead;
         private ImageButton mImage;
+        private LocationAndPacket location;
 
         public Builder(Context context, int dialog) {
             this.context = context;
@@ -119,6 +126,28 @@ public class LuckeyDialog extends Dialog {
 
             mImageHead = image;
         }
+        public void setAnim(final int a, final String n_shops){
+            MyYAnimation myYAnimation = new MyYAnimation();
+            myYAnimation.setRepeatCount(Animation.INFINITE); //旋转的次数（无数次）
+            red_page.startAnimation(myYAnimation);
+            myYAnimation.setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation animation) {
+
+                }
+
+                @Override
+                public void onAnimationEnd(Animation animation) {
+
+                }
+
+                @Override
+                public void onAnimationRepeat(Animation animation) {
+
+                }
+            });
+
+        }
 
         public LuckeyDialog create() {
             LayoutInflater inflater = (LayoutInflater) context
@@ -127,7 +156,7 @@ public class LuckeyDialog extends Dialog {
             final LuckeyDialog dialog = new LuckeyDialog(context, R.style.Dialog);
             View layout = inflater.inflate(R.layout.luckey_dialog, null);
 
-            red_page = (Button) layout.findViewById(R.id.open_btn);
+            red_page = (Button) layout.findViewById(R.id.l_open_btn);
             mImage = (ImageButton) layout.findViewById(R.id.head_img);
             mImage.setImageResource(mImageHead);
             //red_page.setText("开");
@@ -144,20 +173,22 @@ public class LuckeyDialog extends Dialog {
 
             //设置拆红包的按钮
             if (openButtonText != null) {
-                ((Button) layout.findViewById(R.id.open_btn))
+                ((Button) layout.findViewById(R.id.l_open_btn))
                         .setText("");
                 if (openButtonClickListener != null) {
-                    ((Button) layout.findViewById(R.id.open_btn))
+                    ((Button) layout.findViewById(R.id.l_open_btn))
                             .setOnClickListener(new View.OnClickListener() {
                                 public void onClick(View v) {
                                     openButtonClickListener.onClick(dialog,
                                             DialogInterface.BUTTON_POSITIVE);
+                                   /* AnimationDrawable animation= (AnimationDrawable) red_page.getBackground();
+                                    animation.start();*/
                                 }
                             });
                 }
             } else {
                 // if no confirm button just set the visibility to GONE
-                layout.findViewById(R.id.open_btn).setVisibility(
+                layout.findViewById(R.id.l_open_btn).setVisibility(
                         View.GONE);
             }
 
