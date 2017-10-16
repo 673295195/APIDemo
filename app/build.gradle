@@ -33,7 +33,6 @@ dependencies {
     //优惠券
 
     compile 'com.jakewharton:butterknife:8.6.0'
-
     compile 'com.jakewharton:butterknife-compiler:8.6.0'
     compile 'com.amap.api:3dmap:latest.integration'
     compile 'com.android.support:appcompat-v7:25.3.1'

@@ -148,10 +148,8 @@ public class LocationAndPacket extends AppCompatActivity implements AMap.OnMyLoc
 
         //设置SDK 自带定位消息监听
         aMap.setOnMyLocationChangeListener(this);
-
         loadNetData();
     }
-
     // 加载商家bean数据
     private void loadNetData() {
         mOkHttpUtil.getSellerBean();
@@ -172,7 +170,6 @@ public class LocationAndPacket extends AppCompatActivity implements AMap.OnMyLoc
         myLocationStyle.radiusFillColor(Color.argb(0, 0, 0, 0));// 设置圆形的填充颜色  。
         aMap.getUiSettings().setMyLocationButtonEnabled(true);// 设置默认定位按钮是否显示
         aMap.setMyLocationEnabled(true);// 设置为true表示显示定位层并可触发定位，false表示隐藏定位层并不可触发定位，默认是false
-
     }
 
     /**
@@ -337,9 +334,8 @@ public class LocationAndPacket extends AppCompatActivity implements AMap.OnMyLoc
                     myYAnimation.setAnimationListener(new Animation.AnimationListener() {
                         @Override
                         public void onAnimationStart(Animation animation) {
-
                         }
-
+                        //动画结束跳转
                         @Override
                         public void onAnimationEnd(Animation animation) {
                             if (mSellerBean.get(a).getN_redstate().equals("0")) {  //现金红包
@@ -352,7 +348,8 @@ public class LocationAndPacket extends AppCompatActivity implements AMap.OnMyLoc
                                     if (allNetworks[i].isConnected()) {*/
 
                                 String mRedPacket = mReturnSellerPacketBean.getCa_amount();
-                                if (mReturnSellerPacketBean.getCa_switchstate().equals("0")) {
+                                //状态为0,并且不为空
+                                if (mReturnSellerPacketBean.getCa_switchstate().equals("0")&&mRedPacket!=null) {
                                     Intent intent = new Intent(LocationAndPacket.this, OpenSuccess.class);
                                     Log.e(TAG, "钱的大小=: " + mRedPacket);
                                     intent.putExtra("money", mRedPacket);  //红包金额
@@ -373,7 +370,8 @@ public class LocationAndPacket extends AppCompatActivity implements AMap.OnMyLoc
                             } else if (mSellerBean.get(a).getN_redstate().equals("1")) {  //优惠券
                                 String p_amount = mCouponBean.getP_amount();
                                // Log.e(TAG, "是优惠券");
-                                if (mCouponBean.getP_switchstate().equals("0")) {
+                                //状态为0,并且不为空
+                                if (mCouponBean.getP_switchstate().equals("0")&&p_amount!=null) {
                                     Intent intent = new Intent(LocationAndPacket.this, OpenCouponSuccess.class);
                                     //double redPacket = mString.getRedPacket();
 
@@ -395,7 +393,8 @@ public class LocationAndPacket extends AppCompatActivity implements AMap.OnMyLoc
 
                                 String chipcol = mPacketFragmentBean.getVi_chipcol();
                                // Log.e(TAG, "是活动碎片");
-                                if (mPacketFragmentBean.getVi_switchstate().equals("0")) {
+                                //状态为0,并且不为空
+                                if (mPacketFragmentBean.getVi_switchstate().equals("0")&&chipcol!=null) {
                                     Intent intent = new Intent(LocationAndPacket.this, OpenFragmentSuccess.class);
                                     //double redPacket = mString.getRedPacket();
                                     Log.e(TAG, "活动碎片为: " + chipcol);
@@ -418,7 +417,6 @@ public class LocationAndPacket extends AppCompatActivity implements AMap.OnMyLoc
 
                         @Override
                         public void onAnimationRepeat(Animation animation) {
-
                         }
                     });
                 }
@@ -464,8 +462,8 @@ public class LocationAndPacket extends AppCompatActivity implements AMap.OnMyLoc
         LogUtils.log("onMapClick: 点击坐标" + latitude + "==" + longitude);
 
         LatLng latlng1 = new LatLng(mWEI, mJING);
+        //高德自带的util工具类
         float calculateLineDistance = AMapUtils.calculateLineDistance(latlng1, mLatLng);
-
         LogUtils.log("2个marker间距离=" + calculateLineDistance + "米");
     }
 
@@ -483,8 +481,8 @@ public class LocationAndPacket extends AppCompatActivity implements AMap.OnMyLoc
 
 
     //获取红包金额
-    public void getPacketData(ReturnSellerPacketBean returnSellerPacketBean) {
-        mReturnSellerPacketBean = returnSellerPacketBean;
+    public void getPacketData(ReturnSellerPacketBean sellerPacketBean) {
+        mReturnSellerPacketBean = sellerPacketBean;
 
     }
 

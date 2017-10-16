@@ -162,6 +162,7 @@ public class OkHttpUtil {
     public void getBuyerBean() {
         //获取所有商家信息地址
         String url = "http://192.168.23.1:8080/lbsbonustext/member.action";
+       // String url = "http://192.168.23.1:8080/lbsbonustext/logintest.action";
         mOkHttpClient = new OkHttpClient();
         //url可能不同
         Request mRequest = new Request.Builder().url(url).build();

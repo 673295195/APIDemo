@@ -1,10 +1,14 @@
 package com.mgcoin.ar_department.lbs_redpacket.util;
 
+import android.util.Log;
+
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+
+import static android.content.ContentValues.TAG;
 
 public class PostToServer {
 	/**
@@ -18,9 +22,10 @@ public class PostToServer {
 		// 拼装路径
 
 		try {
-			String path = "http://10.10.5.31:8080/web/LoginServlet?username="
+            String path="http://192.168.23.1:8080/lbsbonustext/logintest.action";
+			/*String path = "http://10.10.5.31:8080/web/LoginServlet?username="
 					+ URLEncoder.encode(username, "UTF-8") + "&password="
-					+ password;
+					+ password;*/
 			URL url = new URL(path);
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.setConnectTimeout(5000);
@@ -52,9 +57,10 @@ public class PostToServer {
 	public static String loginByPost(String username, String password) {
 		// 提交数据到服务器
 		// 拼装路径
+		Log.e(TAG, "上传的信息="+username+"与:"+password);
 
 		try {
-			String path = "http://192.168.23.1:8080/lbsbonustext/member.action";
+			String path = "http://192.168.23.1:8080/lbsbonustext/logintest.action";
 			//String path = "http://10.10.5.31:8080/web/LoginServlet";
 			URL url = new URL(path);
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
