@@ -1,15 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
   >
+
 <LinearLayout
     android:orientation="vertical"
     android:visibility="gone"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:id="@+id/linearLayout">
     <TextView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -98,11 +100,22 @@
             android:textColor="@android:color/black" />
 
     </RadioGroup>
+
     <com.amap.api.maps2d.MapView
         android:id="@+id/map"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_below="@+id/linearLayout"
+        android:layout_toEndOf="@+id/linearLayout">
 
     </com.amap.api.maps2d.MapView>
+    <ImageView
+        android:visibility="gone"
+        android:layout_margin="6dp"
+        android:layout_alignParentRight="true"
+        android:src="@drawable/refresh_selector"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:onClick="refreshMap"/>
 
-</LinearLayout>
+</RelativeLayout>
