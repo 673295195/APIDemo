@@ -1,5 +1,6 @@
 package com.mgcoin.ar_department.lbs_redpacket.view;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -10,6 +11,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.mgcoin.ar_department.apidemo.R;
+import com.mgcoin.ar_department.lbs_redpacket.util.OkHttpUtil;
 import com.orzangleli.coupon.view.CouponView;
 
 import butterknife.BindView;
@@ -40,27 +42,40 @@ public class OpenCouponSuccess extends AppCompatActivity {
     TextView coupon;
     private String mName;
     private String mCoupon;
+    private String mDate;
+    private TextView mData;
+    private TextView mLimit;
+    private String mId;
+    private OkHttpUtil mOkHttpUtil;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_open_coupon_success);
         ButterKnife.bind(this);
-
+        init();
         initIntent();
         initData();
+    }
+
+    private void init() {
+        mLimit = (TextView) findViewById(R.id.limittime);
+        mData = (TextView) findViewById(R.id.gettime);
     }
 
     private void initIntent() {
         if (getIntent() != null) {
             mCoupon = getIntent().getStringExtra("coupon");
             mName = getIntent().getStringExtra("name");
+            mDate = getIntent().getStringExtra("date");
+            mId= getIntent().getStringExtra("buyer");
         }
     }
 
     private void initData() {
         name.setText(mName);
         coupon.setText(mCoupon);
+        mData.setText("领取时间:"+mDate);
     }
 
     @OnClick({R.id.close, R.id.search})
@@ -70,7 +85,9 @@ public class OpenCouponSuccess extends AppCompatActivity {
                 finish();
                 break;
             case R.id.search:
-
+                mOkHttpUtil.loadBuyerPacketRecord(mId,"1");
+                Intent intent=new Intent(OpenCouponSuccess.this,CouponRecord.class);
+                startActivity(intent);
                 break;
         }
     }

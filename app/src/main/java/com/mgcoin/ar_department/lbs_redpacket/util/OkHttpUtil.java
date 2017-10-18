@@ -8,6 +8,7 @@ import com.mgcoin.ar_department.lbs_redpacket.bean.CouponBean;
 import com.mgcoin.ar_department.lbs_redpacket.bean.PacketFragmentBean;
 import com.mgcoin.ar_department.lbs_redpacket.bean.ReturnSellerPacketBean;
 import com.mgcoin.ar_department.lbs_redpacket.bean.SellerBean;
+import com.mgcoin.ar_department.lbs_redpacket.view.CouponRecord;
 import com.mgcoin.ar_department.lbs_redpacket.view.LocationAndPacket;
 import com.mgcoin.ar_department.lbs_redpacket.view.MGCoinRecord;
 import com.google.gson.Gson;
@@ -32,10 +33,14 @@ public class OkHttpUtil {
 
     private OkHttpClient mOkHttpClient;
     private MGCoinRecord mMGCoinRecord;
+    private CouponRecord mCouponRecord;
     private static final String TAG = "OkHttpUtil";
     private LocationAndPacket mLocationAndPacket;
     private PostToServer mPostToServer=new PostToServer();
     private int mId;
+    private String mStringvip;
+    private String mV_name;
+    private String mV_amount;
 
     public OkHttpUtil(LocationAndPacket locationAndPacket) {
         mLocationAndPacket = locationAndPacket;
@@ -134,8 +139,8 @@ public class OkHttpUtil {
             }
         });
     }
-
-    public void loadBuyerPacketRecord() {
+    //获取红包记录,传入会员ID,哪种红包
+    public void loadBuyerPacketRecord(String s, final String id) {
         String url = "";
         Request mRequest = new Request.Builder().url(url).build();
         mOkHttpClient.newCall(mRequest).enqueue(new Callback() {
@@ -148,25 +153,35 @@ public class OkHttpUtil {
                     }
                 });
             }
-
+            //返回红包历史记录
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 String string = response.body().string();
                 Gson gson = new Gson();
-                BuyerBean buyerBean = gson.fromJson(string, BuyerBean.class);
-                mMGCoinRecord.getData(buyerBean);
+                ArrayList<ReturnSellerPacketBean> list = new ArrayList<ReturnSellerPacketBean>();
+                Type type = new TypeToken<List<ReturnSellerPacketBean>>() {
+                }.getType();
+                list = gson.fromJson(string, type);
+                if (id.equals("0")){
+                    mMGCoinRecord.getData(list,mV_name,mV_amount);
+                }else if (id.equals("1")){
+                    mCouponRecord.getdata(list,mV_name,mV_amount);
+                }
             }
         });
     }
 
     public void getBuyerBean() {
-        //获取所有商家信息地址
+        //获取会员信息地址
         String url = "http://192.168.23.1:8080/lbsbonustext/member.action";
        // String url = "http://192.168.23.1:8080/lbsbonustext/logintest.action";
         mOkHttpClient = new OkHttpClient();
         //url可能不同
         Request mRequest = new Request.Builder().url(url).build();
         mOkHttpClient.newCall(mRequest).enqueue(new Callback() {
+
+
+
             @Override
             public void onFailure(Call call, IOException e) {
                 mLocationAndPacket.runOnUiThread(new Runnable() {
@@ -180,21 +195,25 @@ public class OkHttpUtil {
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                String string = response.body().string();
+                mStringvip = response.body().string();
 
-                Log.e(TAG, "获得会员数据" + string);
+                Log.e(TAG, "获得会员数据" + mStringvip);
                 Gson gson = new Gson();
 
                 ArrayList<BuyerBean> list = new ArrayList<BuyerBean>();
                 Type type = new TypeToken<List<BuyerBean>>() {
                 }.getType();
-                list = gson.fromJson(string, type);
+                list = gson.fromJson(mStringvip, type);
                 //Log.e(TAG, "当前线程为" + Thread.currentThread());
                // Log.e(TAG, "会员个数 " + list.size());
                 mId = list.get(0).getId();
+                mV_name = list.get(0).getV_name();
+                mV_amount = list.get(0).getV_amount();
                 mLocationAndPacket.setBuyerData(list);
 
-                mPostToServer.loginByPost("张3","1122");
+
+                //返回会员信息
+                mPostToServer.loginByPost(mStringvip);
 
             }
         });

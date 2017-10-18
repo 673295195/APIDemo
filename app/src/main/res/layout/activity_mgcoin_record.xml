@@ -84,6 +84,7 @@
             android:textSize="30sp"/>
 
     </RelativeLayout>
+
 <android.support.v7.widget.RecyclerView
     android:id="@+id/recycle"
     android:layout_weight="5"

@@ -78,6 +78,7 @@ public class LocationAndPacket extends AppCompatActivity implements AMap.OnMyLoc
     private CouponBean mCouponBean;
     private PacketFragmentBean mPacketFragmentBean;
     private Context mContext;
+    //private MGCoinRecord mMGCoinRecord;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,14 +99,15 @@ public class LocationAndPacket extends AppCompatActivity implements AMap.OnMyLoc
         mHashMap = new HashMap<>();
         markerOption = new MarkerOptions();
         for (int i = 0; i < mSellerBean.size(); i++) {
+            int id = mSellerBean.get(i).getId();
             mLat1 = mSellerBean.get(i).getN_lat();
             mLon1 = mSellerBean.get(i).getN_location();
             String name = mSellerBean.get(i).getN_shops();
             // Log.e(TAG, "显示=" + name);
-            mHashMap.put(name, i);
+            mHashMap.put(name, id);
             String n_envelope = mSellerBean.get(i).getN_envelope();
             markerOption.position(new LatLng(mLat1, mLon1));
-            markerOption.title(name).snippet("剩余" + n_envelope + "个红包");
+            markerOption.title(name).snippet("剩" + n_envelope + "个可抢红包");
 
             markerOption.draggable(true);
             markerOption.icon(BitmapDescriptorFactory
@@ -301,16 +303,17 @@ public class LocationAndPacket extends AppCompatActivity implements AMap.OnMyLoc
         //判断是否在范围内,在则弹出红包
         // if (title.equals(name)) {
         if (calculateLineDistance <= R1 && calculateLineDistance > 0) {
-            final int a = mHashMap.get(title);
-            Log.e(TAG, "点击的位置=" + mHashMap.get(title));
+
+            final int id = mHashMap.get(title);
+            Log.e(TAG, "点击的位置=" + id);
             // final int a = mHashMap.get(title);
             //弹出比例红包
             final LuckeyDialog.Builder builder = new LuckeyDialog.Builder(LocationAndPacket.this, R.style.Dialog);//调用style中的Diaog
 
             //商家名字
-            final String n_shops = mSellerBean.get(a).getN_shops();
+            final String n_shops = title;
             //商家头像
-            String n_picture = mSellerBean.get(a).getN_picture();
+            String n_picture = mSellerBean.get(id).getN_picture();
             //设置商家名字
             builder.setName(n_shops);
             //商家头像
@@ -322,8 +325,7 @@ public class LocationAndPacket extends AppCompatActivity implements AMap.OnMyLoc
                     //  需要判断 红包是否领取成功,每个账号一天只能另领个
 
                     //网络请求,获取红包金额
-                    mOkHttpUtil.getPacketMoney(mSellerBean.get(a).getId(), mSellerBean.get(a).getN_redstate());
-
+                    mOkHttpUtil.getPacketMoney(id, mSellerBean.get(id-1).getN_redstate());
 
                     //动画
                     final MyYAnimation myYAnimation = new MyYAnimation();
@@ -338,7 +340,7 @@ public class LocationAndPacket extends AppCompatActivity implements AMap.OnMyLoc
                         //动画结束跳转
                         @Override
                         public void onAnimationEnd(Animation animation) {
-                            if (mSellerBean.get(a).getN_redstate().equals("0")) {  //现金红包
+                            if (mSellerBean.get(id-1).getN_redstate().equals("0")) {  //现金红包
                                /* Context application = mContext.getApplicationContext();
                                 ConnectivityManager connectivity =
                                         (ConnectivityManager) application.getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -352,8 +354,10 @@ public class LocationAndPacket extends AppCompatActivity implements AMap.OnMyLoc
                                 if (mReturnSellerPacketBean.getCa_switchstate().equals("0")&&mRedPacket!=null) {
                                     Intent intent = new Intent(LocationAndPacket.this, OpenSuccess.class);
                                     Log.e(TAG, "钱的大小=: " + mRedPacket);
+
                                     intent.putExtra("money", mRedPacket);  //红包金额
                                     intent.putExtra("name", n_shops);  //商家名字
+                                    intent.putExtra("buyer", mList.get(0).getId());  //会员id
                                    // intent.putExtra("headImage", n_shops);
                                     startActivity(intent);
                                     dialog.dismiss();
@@ -364,12 +368,13 @@ public class LocationAndPacket extends AppCompatActivity implements AMap.OnMyLoc
                                     startActivity(intent);
                                     dialog.dismiss();
                                     marker.destroy();
-                                    Toast.makeText(LocationAndPacket.this, "网络差", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(LocationAndPacket.this, "网络出错", Toast.LENGTH_SHORT).show();
                                 }
 
-                            } else if (mSellerBean.get(a).getN_redstate().equals("1")) {  //优惠券
+                            } else if (mSellerBean.get(id-1).getN_redstate().equals("1")) {  //优惠券
                                 String p_amount = mCouponBean.getP_amount();
-                               // Log.e(TAG, "是优惠券");
+                                String time = mCouponBean.getP_time();
+                                // Log.e(TAG, "是优惠券");
                                 //状态为0,并且不为空
                                 if (mCouponBean.getP_switchstate().equals("0")&&p_amount!=null) {
                                     Intent intent = new Intent(LocationAndPacket.this, OpenCouponSuccess.class);
@@ -378,6 +383,9 @@ public class LocationAndPacket extends AppCompatActivity implements AMap.OnMyLoc
                                     Log.e(TAG, "优惠券大小=: " + p_amount);
                                     intent.putExtra("coupon", p_amount);
                                     intent.putExtra("name", n_shops);
+                                    intent.putExtra("date", time);
+                                    intent.putExtra("buyer", mList.get(0).getId());  //会员id
+
                                     startActivity(intent);
                                     dialog.dismiss();
                                     marker.destroy();
@@ -400,6 +408,7 @@ public class LocationAndPacket extends AppCompatActivity implements AMap.OnMyLoc
                                     Log.e(TAG, "活动碎片为: " + chipcol);
                                     intent.putExtra("fragment", chipcol);
                                     intent.putExtra("name", n_shops);
+                                    intent.putExtra("buyer", mList.get(0).getId());  //会员id
                                     startActivity(intent);
                                     dialog.dismiss();
                                     marker.destroy();
@@ -459,7 +468,7 @@ public class LocationAndPacket extends AppCompatActivity implements AMap.OnMyLoc
         double latitude = mLatLng.latitude;
         double longitude = mLatLng.longitude;
 
-        LogUtils.log("onMapClick: 点击坐标" + latitude + "==" + longitude);
+        Log.e(TAG, "onMapClick: 点击坐标" + latitude + "==" + longitude);
 
         LatLng latlng1 = new LatLng(mWEI, mJING);
         //高德自带的util工具类
@@ -501,6 +510,7 @@ public class LocationAndPacket extends AppCompatActivity implements AMap.OnMyLoc
     //会员信息
     public void setBuyerData(ArrayList<BuyerBean> list) {
         mList = list;
+
     }
 
     //刷新地图

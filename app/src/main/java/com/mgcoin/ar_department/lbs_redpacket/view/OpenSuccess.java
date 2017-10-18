@@ -29,6 +29,8 @@ public class OpenSuccess extends AppCompatActivity {
     private String mADouble;
     private OkHttpUtil mOkHttpUtil;
     private String nameSeller;
+    private String mId;
+    private String mBuyername;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -53,6 +55,7 @@ public class OpenSuccess extends AppCompatActivity {
         if (getIntent() != null) {
             mADouble = getIntent().getStringExtra("money");
             nameSeller = getIntent().getStringExtra("name");
+            mId = getIntent().getStringExtra("buyer");
         }
 /*            Bundle bundle = intent.getExtras();
             mADouble = bundle.getDouble("Seller");
@@ -64,8 +67,8 @@ public class OpenSuccess extends AppCompatActivity {
         mSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //todo 获取消费者红包记录
-                // mOkHttpUtil.loadBuyerPacketRecord();
+                //获取消费者红包记录,传入会员ID,与哪种红包
+                 mOkHttpUtil.loadBuyerPacketRecord(mId,"0");
                 Intent intent = new Intent(OpenSuccess.this, MGCoinRecord.class);
                 startActivity(intent);
                 //finish();
